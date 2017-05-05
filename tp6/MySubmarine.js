@@ -189,3 +189,7 @@ MySubmarine.prototype.turnSub = function(turn) {
 	this.currTurn = turn;
 	//this.rotY = this.rotY + turn;
 }
+
+MySubmarine.prototype.returnToNormal = function() {
+	this.currTurn = 0;
+}
