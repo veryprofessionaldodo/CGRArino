@@ -191,6 +191,8 @@ LightingScene.prototype.display = function() {
 		this.materialDefault.apply();
 		this.translate(this.submarine.posX,0,this.submarine.posZ);
 		this.submarine.swim();
+		var time = Date.now();
+		this.submarine.turbinesRotation(time);
 		//this.submarine.continue();
 		this.pushMatrix();
 			

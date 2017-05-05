@@ -3,10 +3,16 @@
  * @constructor
  */
 
-var rotY, posX, posY, currSpeed, currTurn, speed, updateSpeed;
+var rotY, posX, posY, currSpeed, currTurn;
+var speed, updateSpeed, turbRot;
+var currTime;
+
 
  function MySubmarine(scene) {
+ 	this.currTime = 0;
  	this.rotY = 0;
+ 	this.turbRot = 0;
+ 	this.turbSpeed = 0;
  	this.currSpeed = 0; // CurrentSpeed
  	this.updateSpeed = 0; // Speed to increase when changeSpeed is invoked
  	this.speed = 0; // Final Speed value
@@ -31,6 +37,8 @@ var rotY, posX, posY, currSpeed, currTurn, speed, updateSpeed;
  MySubmarine.prototype.display = function() {
  	
  	// Body
+
+ 	this.scene.translate(0,0,-2);
 
  	this.scene.pushMatrix();
  		this.scene.scale(0.9/2,1.2/2,4.08);
@@ -127,25 +135,34 @@ var rotY, posX, posY, currSpeed, currTurn, speed, updateSpeed;
 			this.cylinder.display();
 			this.innerCylinder.display();
 		this.scene.popMatrix();
-		//this.pushMatrix();
+
+		//this.scene.rotate(Math.PI/2,0,0,1);
+
 		this.scene.pushMatrix();
 			this.scene.translate(-.579,-0.35,-0.14);
+			this.scene.rotate(this.turbRot * degToRad,0,0,1);
 			this.scene.scale(0.07,0.35,1);
 			this.quad.display();
 		this.scene.popMatrix();
 		this.scene.pushMatrix();
 			this.scene.translate(.579,-0.35,-0.14);
+			this.scene.rotate(this.turbRot * degToRad,0,0,1);
 			this.scene.scale(0.07,0.35,1);
+			this.scene.rotate(Math.PI/2,0,0,1);
 			this.quad.display();
 		this.scene.popMatrix();
 		this.scene.pushMatrix();
 			this.scene.translate(.579,-0.35,.85);
+			this.scene.rotate(this.turbRot * degToRad,0,0,1);
+
 			this.scene.scale(0.07,0.35,1);
 			this.scene.rotate(Math.PI,1,0,0);
 			this.quad.display();
 		this.scene.popMatrix();
 		this.scene.pushMatrix();
-			this.scene.translate(-.579,-0.35,.85);
+			this.scene.translate(-.579,-0.35,.85);	
+			this.scene.rotate(this.turbRot * degToRad,0,0,1);
+
 			this.scene.scale(0.07,0.35,1);
 			this.scene.rotate(Math.PI,1,0,0);
 			this.quad.display();
@@ -184,14 +201,22 @@ MySubmarine.prototype.swim = function() {
 
 	this.posX = this.posX + (0.01*this.speed)*Math.sin((this.rotY) * degToRad);//(swim/2 * Math.cos(this.rotY-90));
 	this.posZ = this.posZ + (0.01*this.speed)*Math.cos((this.rotY) * degToRad);//(swim/2 * Math.sin(this.rotY-90));
-
+	this.turbRot = this.turbRot + this.turbSpeed;
 	this.rotY = this.rotY+(this.currTurn/5);
 }
 
 
 MySubmarine.prototype.swimSub = function(swim) {
 	this.speed = this.speed + swim;
-	this.updateSpeed = 0.1;
+	
+}
+
+MySubmarine.prototype.turbinesRotation = function(now) {
+	var deltaTime = now - this.currTime;
+	this.turbSpeed = (this.speed/3)*(360/60);
+	console.log(this.speed);
+	this.currTime = now;
+	
 }
 
 MySubmarine.prototype.turnSub = function(turn) {
