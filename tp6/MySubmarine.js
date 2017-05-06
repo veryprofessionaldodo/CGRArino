@@ -74,6 +74,7 @@ var currTime;
  	this.scene.popMatrix();
  	this.scene.pushMatrix();
  		this.scene.scale(0.9/2,1.2/2,0.6);
+ 		this.scene.rotate(Math.PI,0,0,1);
  		this.scene.translate(0,0,4.08/.6);
  		this.sphere.display();
  	this.scene.popMatrix();	

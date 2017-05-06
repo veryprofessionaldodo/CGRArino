@@ -14,19 +14,12 @@
  MyCylinder.prototype.constructor = MyCylinder;
 
  MyCylinder.prototype.initBuffers = function() {
- 	var theta = Math.PI*2/this.slices;
+ 	var theta = 2*Math.PI/this.slices;
 	this.vertices = [];
 	this.normals = [];
 	this.texCoords = [];
 	//var i;
-	/*
-	for(i = 0; i < this.slices; i++)
-	{
-		this.vertices.push(Math.cos(i*theta), Math.sin(i*theta), 0);
-		this.normals.push(Math.cos(i*theta), Math.sin(i*theta), 0);
-		//this.texCoords.push((i+1)/(this.slices), (i+1)/(this.slices));
-	}	
-	*/
+	
 	for (var j = 0; j <= this.stacks ; j++) {
 		for(var i = 0; i < this.slices; i++)
  		{
@@ -53,11 +46,6 @@
 
  		}
   	}
-
-
-
-	
- 	
 
  	this.primitiveType = this.scene.gl.TRIANGLES;
  	this.initGLBuffers();
