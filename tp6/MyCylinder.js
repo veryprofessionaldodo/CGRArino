@@ -18,27 +18,28 @@
 	this.vertices = [];
 	this.normals = [];
 	this.texCoords = [];
-	var i;
+	//var i;
+	/*
 	for(i = 0; i < this.slices; i++)
 	{
 		this.vertices.push(Math.cos(i*theta), Math.sin(i*theta), 0);
 		this.normals.push(Math.cos(i*theta), Math.sin(i*theta), 0);
-		this.texCoords.push((i+1)/(this.slices), (i+1)/(this.slices));
+		//this.texCoords.push((i+1)/(this.slices), (i+1)/(this.slices));
 	}	
- 	var height = 0;
-	for (var j = 0; j < this.stacks ; j++) {
-		 		height += 1 / this.stacks;
-
+	*/
+	for (var j = 0; j <= this.stacks ; j++) {
 		for(var i = 0; i < this.slices; i++)
  		{
- 			this.vertices.push(Math.cos(i*theta), Math.sin(i*theta), height);
- 			this.texCoords.push((i+1)/this.slices,j/this.stacks);
- 			this.normals.push(Math.cos(i*theta), Math.sin(i*theta), height);
+ 			var height = (1 / this.stacks);
+ 			this.vertices.push(Math.cos(i*theta), Math.sin(i*theta), j*height);
+ 			this.texCoords.push(i/this.slices,j/this.stacks);
+ 			this.normals.push(Math.cos(i*theta), Math.sin(i*theta), 0);
 		}
+ 	}
  	
- 
-	}
- 	height = 0;
+
+
+ 	//height = 0;
  	this.indices = [];
 	for(var i = 0; i < this.slices * this.stacks ; i++)
  	{
@@ -52,6 +53,8 @@
 
  		}
   	}
+
+
 
 	
  	

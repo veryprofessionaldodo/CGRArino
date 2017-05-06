@@ -50,6 +50,8 @@ MyInterface.prototype.init = function(application) {
 	
 	this.gui.add(this.scene, 'speed', -5, 5);
 	
+	this.gui.add(this.scene, 'currSubmarineAppearance', this.scene.submarineAppearanceList);
+	
 	return true;
 };
 

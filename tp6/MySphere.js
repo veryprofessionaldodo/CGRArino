@@ -14,58 +14,38 @@
  MySphere.prototype.constructor = MySphere;
 
  MySphere.prototype.initBuffers = function() {
- 	var theta = Math.PI*2/this.slices;
-	var alfa = (Math.PI/2)/(this.stacks);
-	var finalvertex = 0;
-	this.vertices = [];
-	this.normals = [];
-	this.texCoords = [];
-	for(var i = 0; i < this.slices; i++)
-	{
-		this.vertices.push(Math.cos(i*theta), Math.sin(i*theta), 0);
-  		this.normals.push(Math.cos(i*theta), Math.sin(i*theta),0);
-  		this.texCoords.push(i/this.slices, i/this.slices);
-		finalvertex++;
+ 	var theta = 2*Math.PI/this.slices;
+ 	var alfa = Math.PI/(2*this.stacks);
+
+ 	this.vertices = [];
+ 	this.texCoords = [];
+ 	for(var j = 0; j <= this.stacks; j++){
+		for (var i = 0; i < this.slices; i++) {			
+			this.vertices.push(Math.sin(j*alfa)*Math.cos(i*theta), Math.sin(j*alfa)*Math.sin(i*theta), Math.cos(j*alfa));
+			this.texCoords.push(0.5*(Math.sin(j*alfa)*Math.cos(i*theta))+.5, 0.5*(Math.sin(j*alfa)*Math.sin(i*theta))+.5);
+		}
 	}
-	var final = 0;
-	var height = 0;
-	for (var j = 0; j < this.stacks+1; j++) {
-		height = Math.sin(j*alfa);
-		for(var i = 0; i < this.slices; i++)
- 		{
- 			this.vertices.push(Math.cos(i*theta)*Math.cos(j*alfa), Math.sin(i*theta)*Math.cos(j*alfa), height);
-  			this.normals.push(Math.cos(i*theta)*Math.cos(j*alfa), Math.sin(i*theta)*Math.cos(j*alfa),Math.sin(j*alfa));
-  			this.texCoords.push((i+1)/this.slices,j/this.stacks);
-			finalvertex++;
-
- 		}
- 		final = i;
-	}
-
-	this.vertices.push(0,0,1);
-  	this.normals.push(0,0,1);
-  	finalvertex++;
-
-
+	
  	this.indices = [];
- 	var final;
-	for(var i = 0; i < this.slices * (this.stacks+1) ; i++)
- 	{
- 		if ((i + 1) % this.slices != 0) {	
- 			this.indices.push(i,i+1, i + this.slices);
- 			this.indices.push(i+1,i+1+this.slices, i + this.slices);
- 		}
- 		else {
- 			this.indices.push(i, i+1-this.slices, i+this.slices);
- 			this.indices.push(i+1-this.slices, i+1, i+this.slices);
+	for(var j = 0; j < this.stacks; j++){
+		for (var i = 0; i < this.slices; i++) {
+		 	var tmp = i + j*this.slices;
+		 	if(i != this.slices-1){
+		 		this.indices.push(tmp+this.slices, tmp+1, tmp);
+ 				this.indices.push(tmp+1, tmp+this.slices, tmp+this.slices+1);
+ 			}
+ 			else{
+ 				this.indices.push(tmp+this.slices,j*this.slices, tmp);
+ 				this.indices.push(j*this.slices,tmp+this.slices,(j+1)*this.slices);
+ 			}
+		}
+	}
 
- 		}
-  	}
-
-  	// Ultimo verice
-	for (var i = 0; i < this.slices ; i++) {
-	//	this.indices.push(finalvertex, i, i+1);
-
+ 	this.normals = [];
+ 	for(var j = 0; j <= this.stacks; j++){
+		for (var i = 0; i < this.slices; i++) {
+			this.normals.push(Math.sin(j*alfa)*Math.cos(i*theta), Math.sin(j*alfa)*Math.sin(i*theta), Math.cos(j*alfa));
+		}
 	}
 
  	this.primitiveType = this.scene.gl.TRIANGLES;

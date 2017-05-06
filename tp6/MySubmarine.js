@@ -29,6 +29,25 @@ var currTime;
 	this.trapeze = new MyTrapeze(scene);
 	this.quad = new MyQuad(scene);
 	
+	this.submarineAppearances = [];
+
+	var steelAppearance = new CGFappearance(this.scene);
+	steelAppearance.loadTexture("../resources/images/steel.jpg");
+	this.submarineAppearances.push(steelAppearance);
+
+	var monaLisaAppearance = new CGFappearance(this.scene);
+	monaLisaAppearance.loadTexture("../resources/images/monalisa.jpg");
+	this.submarineAppearances.push(monaLisaAppearance);
+
+	var cageAppearance = new CGFappearance(this.scene);
+	cageAppearance.loadTexture("../resources/images/cage.png");
+	this.submarineAppearances.push(cageAppearance);
+	
+	var poolBallAppearance = new CGFappearance(this.scene);
+	poolBallAppearance.loadTexture("../resources/images/poolball.jpg");
+	this.submarineAppearances.push(poolBallAppearance);
+	
+
 };
 
  MySubmarine.prototype = Object.create(CGFobject.prototype);
@@ -36,8 +55,9 @@ var currTime;
 
  MySubmarine.prototype.display = function() {
  	
- 	// Body
+ 	this.submarineAppearances[this.scene.currSubmarineAppearance].apply();
 
+ 	// Body
  	this.scene.translate(0,0,-2);
 
  	this.scene.pushMatrix();

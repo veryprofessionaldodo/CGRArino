@@ -78,6 +78,10 @@ LightingScene.prototype.init = function(application) {
 	this.oceanAppearance.setShininess(120);
 	this.oceanAppearance.loadTexture("../resources/images/ocean.jpg");
 	this.oceanAppearance.setTextureWrap("MIRRORED_REPEAT", "MIRORRED_REPEAT");
+	
+	this.currSubmarineAppearance = 0;
+	this.submarineAppearanceList = {'steel': 0, 'artsy': 1, 'cage': 2, 'poolball': 3};
+	
 };
 
 
@@ -93,8 +97,8 @@ LightingScene.prototype.initLights = function() {
 	this.lights[0].setPosition(4, 6, 3, 1);
 	this.lights[0].setVisible(true); // show marker on light position (different from enabled)
 	
-	this.lights[0].setAmbient(0.1, 0.1, 0.1, 1);
-	this.lights[0].setDiffuse(0, 0.6,1, 1.0);
+	this.lights[0].setAmbient(0.5, 0.5, 0.5, 1);
+	this.lights[0].setDiffuse(0.7, 0.7,0.7, 1.0);
 	this.lights[0].setConstantAttenuation(0);
 	this.lights[0].setLinearAttenuation(0.15);
 	this.lights[0].setQuadraticAttenuation(0);
@@ -104,8 +108,8 @@ LightingScene.prototype.initLights = function() {
 	this.lights[1].setPosition(-4, 6, 3, 1);
 	this.lights[1].setVisible(true); // show marker on light position (different from enabled)
 	
-	this.lights[1].setAmbient(0.1, 0.1, 0.1, 1);
-	this.lights[1].setDiffuse(0, 0.6,1, 1.0);
+	this.lights[1].setAmbient(0.5, 0.5, 0.5, 1);
+	this.lights[1].setDiffuse(0.7, 0.7,0.7, 1.0);
 	this.lights[1].setConstantAttenuation(0);
 	this.lights[1].setLinearAttenuation(0.15);
 	this.lights[1].setQuadraticAttenuation(0);
@@ -197,7 +201,7 @@ LightingScene.prototype.display = function() {
 		this.pushMatrix();
 			
 			this.rotate(this.submarine.rotY * degToRad, 0,1,0);
-			this.reckAppearance.apply();
+			//this.steelAppearance.apply();
 			this.submarine.display();
 		this.popMatrix();
 		this.translate(0,0,5);
