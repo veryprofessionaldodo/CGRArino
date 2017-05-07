@@ -211,11 +211,6 @@ var currTime;
 
  };
 
-MySubmarine.prototype.turnSub = function(turn) {
-	this.currTurn = turn;
-	//this.rotY = this.rotY+turn;
-	
-};
 
 
 MySubmarine.prototype.swim = function() {
@@ -235,14 +230,14 @@ MySubmarine.prototype.swimSub = function(swim) {
 MySubmarine.prototype.turbinesRotation = function(now) {
 	var deltaTime = now - this.currTime;
 	this.turbSpeed = (this.speed/3)*(360/60);
-	console.log(this.speed);
 	this.currTime = now;
 	
 }
 
 MySubmarine.prototype.turnSub = function(turn) {
-	this.currTurn = turn;
-	//this.rotY = this.rotY + turn;
+	this.currTurn = this.currTurn + turn;
+//	this.rotY = this.rotY + turn;
+	console.log(this.currTurn);
 }
 
 MySubmarine.prototype.returnToNormal = function() {

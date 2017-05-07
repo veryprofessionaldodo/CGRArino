@@ -59,6 +59,8 @@ MyInterface.prototype.init = function(application) {
  * processKeyboard
  * @param event {Event}
  */
+
+
 MyInterface.prototype.processKeyDown = function(event) {
 	// call CGFinterface default code (omit if you want to override)
 	
@@ -67,16 +69,25 @@ MyInterface.prototype.processKeyDown = function(event) {
 	
 	// for better cross-browser support, you may also check suggestions on using event.which in http://www.w3schools.com/jsref/event_key_keycode.asp
 	
+
 	if (event.keyCode == 87)
 		this.scene.submarine.swimSub(this.scene.speed);
 	if (event.keyCode == 83)
 		this.scene.submarine.swimSub(-this.scene.speed);
 	if (event.keyCode == 65)
-		this.scene.submarine.turnSub(this.scene.speed);
+		this.scene.submarine.turnSub(this.scene.speed*2);
 	if (event.keyCode == 68)
-		this.scene.submarine.turnSub(-this.scene.speed);
+		this.scene.submarine.turnSub(-this.scene.speed*2);
 
-	console.log(event.keyCode + " ");
+	if (event.keyCode == 80) 
+		this.scene.submarine.changePeriscope(1);
+	else if (event.keyCode == 76)
+		this.scene.submarine.changePeriscope(-1);
+
+	if (event.keyCode == 69) 
+		this.scene.submarine.isChangingHeight = this.scene.speed;
+	if (event.keyCode == 81) 
+		this.scene.submarine.isChangingHeight = -this.scene.speed;
 	
 };
 
@@ -93,6 +104,9 @@ MyInterface.prototype.processKeyUp = function(event) {
 	if (event.keyCode == 65)
 		this.scene.submarine.returnToNormal();
 
-	console.log(event.keyCode + " ");
+	if (event.keyCode == 69 || event.keyCode == 81) 
+		this.scene.submarine.isChangingHeight = 0;
+	
+
 	
 };
