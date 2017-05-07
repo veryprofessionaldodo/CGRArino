@@ -80,9 +80,9 @@ MyInterface.prototype.processKeyDown = function(event) {
 		this.scene.submarine.turnSub(-this.scene.speed*2);
 
 	if (event.keyCode == 80) 
-		this.scene.submarine.changePeriscope(1);
+		this.scene.submarine.changePeriscope(this.scene.speed);
 	else if (event.keyCode == 76)
-		this.scene.submarine.changePeriscope(-1);
+		this.scene.submarine.changePeriscope(-this.scene.speed);
 
 	if (event.keyCode == 69) 
 		this.scene.submarine.isChangingHeight = this.scene.speed;
