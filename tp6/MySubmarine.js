@@ -3,23 +3,26 @@
  * @constructor
  */
 
-var rotY, posX, posY, currSpeed, currTurn;
-var speed, updateSpeed, turbRot;
-var currTime;
+var rotY, posX, currPosY, posY, currSpeed, currTurn;
+var speed, turbRot, periscopeY , currPeriscopeY;
+var rudderTurn, currRudderTurn;
+var currTime, isChangingHeight;
 
 
  function MySubmarine(scene) {
- 	this.currTime = 0;
+ 	this.currTime = 0; this.rudderTurn = 0; this.currRudderTurn = 0;
+ 	this.periscopeY = 0; 
+ 	this.currPeriscopeY = 0;
  	this.rotY = 0;
  	this.turbRot = 0;
  	this.turbSpeed = 0;
+ 	this.currPosY = 0;
+ 	this.isChangingHeight = 0;
+ 	this.posY = 0;
  	this.currSpeed = 0; // CurrentSpeed
- 	this.updateSpeed = 0; // Speed to increase when changeSpeed is invoked
  	this.speed = 0; // Final Speed value
  	this.currTurn = 0;
- 	this.posX = 0;
- 	this.posY = 0;
- 	this.posZ = 0;
+ 	this.posX = 0; 	this.currPosY = 0; 	this.posZ = 0;
  	this.cylinder = new MyCylinder(scene, 20,20);
 	this.sphere = new MySphere(scene,20,20);
  	CGFobject.call(this,scene);
@@ -88,33 +91,39 @@ var currTime;
  	//Fins
 
 	this.scene.pushMatrix();
+	//Left
 		this.scene.pushMatrix();
+			
 			this.scene.translate(.8,0,-0.3);
 			this.scene.scale(.5,0.1,.3);
 			this.scene.translate(0,-0.5,0);
 			this.trapeze.display();
 		this.scene.popMatrix();
+	//Right
 		this.scene.pushMatrix();
 			this.scene.rotate(Math.PI,0,0,1);
 			this.scene.translate(.8,0,-0.3);
 			this.scene.scale(.5,0.1,.3);
 			this.scene.translate(0,-0.5,0);
-
 			this.trapeze.display();
 		this.scene.popMatrix();
+	//Up
 		this.scene.pushMatrix();
+			this.scene.rotate(this.currRudderTurn * degToRad, 0,1,0);
 			this.scene.rotate(Math.PI/2,0,0,1);
 			this.scene.translate(.8,0,-0.3);
 			this.scene.scale(.5,0.1,.3);
 			this.scene.translate(0,-0.5,0);
 			this.trapeze.display();
 		this.scene.popMatrix();
+	//Down
 		this.scene.pushMatrix();
+			this.scene.rotate(this.currRudderTurn * degToRad, 0,1,0);
 			this.scene.rotate(-Math.PI/2,0,0,1);
 			this.scene.translate(.8,0,-0.3);
 			this.scene.scale(.5,1/20,.3);
 			this.scene.translate(0,-0.5,0);
-		this.trapeze.display();
+			this.trapeze.display();
 		this.scene.popMatrix();
 		this.scene.pushMatrix();
 			this.scene.translate(.4,.9,2.6);
@@ -195,14 +204,14 @@ var currTime;
 
 	this.scene.pushMatrix();
 		this.scene.pushMatrix();
-			this.scene.translate(0,1.2,2.65);
+			this.scene.translate(0,0.9 + this.currPeriscopeY,2.65);
 			this.scene.scale(0.05,.9,0.05);
 			this.scene.rotate(-Math.PI/2,1,0,0);
 			this.cylinder.display();
 			this.innerCylinder.display();
 		this.scene.popMatrix();
 		this.scene.pushMatrix();
-			this.scene.translate(0,2.1,2.6);
+			this.scene.translate(0,1.8 + this.currPeriscopeY,2.6);
 			this.scene.scale(0.05,.05,0.3);
 			this.cylinder.display();
 			this.innerCylinder.display();
@@ -215,10 +224,18 @@ var currTime;
 
 MySubmarine.prototype.swim = function() {
 
-	this.posX = this.posX + (0.01*this.speed)*Math.sin((this.rotY) * degToRad);//(swim/2 * Math.cos(this.rotY-90));
-	this.posZ = this.posZ + (0.01*this.speed)*Math.cos((this.rotY) * degToRad);//(swim/2 * Math.sin(this.rotY-90));
+	if(this.isChangingHeight != 0)
+		this.posY = this.posY + this.isChangingHeight/20;
+	this.currPosY = this.currPosY + (this.posY- this.currPosY)/5;
+	this.currSpeed = this.currSpeed + (this.speed - this.currSpeed)/5;
+	this.posX = this.posX + (0.01*this.currSpeed)*Math.sin((this.rotY) * degToRad);//(swim/2 * Math.cos(this.rotY-90));
+	this.posZ = this.posZ + (0.01*this.currSpeed)*Math.cos((this.rotY) * degToRad);//(swim/2 * Math.sin(this.rotY-90));
 	this.turbRot = this.turbRot + this.turbSpeed;
+	this.currRudderTurn = this.currRudderTurn + (this.rudderTurn- this.currRudderTurn)/7;
 	this.rotY = this.rotY+(this.currTurn/5);
+
+
+	this.currPeriscopeY = this.currPeriscopeY + (this.periscopeY - this.currPeriscopeY)/20;
 }
 
 
@@ -235,11 +252,23 @@ MySubmarine.prototype.turbinesRotation = function(now) {
 }
 
 MySubmarine.prototype.turnSub = function(turn) {
-	this.currTurn = this.currTurn + turn;
+	this.rudderTurn = turn * 6;
+	if (this.speed >=  0) 
+		this.currTurn = this.currTurn + turn;
+	else 
+		this.currTurn = this.currTurn - turn;
+
+	
+
 //	this.rotY = this.rotY + turn;
 	console.log(this.currTurn);
 }
 
 MySubmarine.prototype.returnToNormal = function() {
 	this.currTurn = 0;
+	this.rudderTurn = 0;
+}
+
+MySubmarine.prototype.changePeriscope = function(height) {
+	this.periscopeY = height/3;
 }

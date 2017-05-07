@@ -88,6 +88,7 @@ MyInterface.prototype.processKeyDown = function(event) {
 		this.scene.submarine.isChangingHeight = this.scene.speed;
 	if (event.keyCode == 81) 
 		this.scene.submarine.isChangingHeight = -this.scene.speed;
+	console.log(event.keyCode + " ");
 	
 };
 
