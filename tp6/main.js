@@ -21,6 +21,9 @@ serialInclude([
 	'MyClockHand.js',
 	'MySphere.js',
 	'MyTrapeze.js',
+	'MyTarget.js',
+	'MyTorpedo.js',
+
 
 
 

@@ -1,5 +1,5 @@
 /**
- * MySubmarine
+ * MyTorpedo
  * @constructor
  */
 
@@ -9,7 +9,7 @@ var rudderTurn, currRudderTurn, horizontalRudder, currHorizontalRudder;
 var currTime, isChangingHeight, vertRot, currVertRot;
 
 
- function MySubmarine(scene) {
+ function MyTorpedo(scene) {
  	this.currTime = 0; this.rudderTurn = 0; this.currRudderTurn = 0;
  	this.periscopeY = 0; 
  	this.currHorizontalRudder = 0; this.horizontalRudder = 0;
@@ -55,10 +55,10 @@ var currTime, isChangingHeight, vertRot, currVertRot;
 
 };
 
- MySubmarine.prototype = Object.create(CGFobject.prototype);
- MySubmarine.prototype.constructor = MySubmarine;
+ MyTorpedo.prototype = Object.create(CGFobject.prototype);
+ MyTorpedo.prototype.constructor = MyTorpedo;
 
- MySubmarine.prototype.display = function() {
+ MyTorpedo.prototype.display = function() {
  	this.submarineAppearances[this.scene.currSubmarineAppearance].apply();
 
  	// Body
@@ -67,25 +67,18 @@ var currTime, isChangingHeight, vertRot, currVertRot;
 
 
  	this.scene.pushMatrix();
- 		this.scene.scale(0.9/2,1.2/2,4.08);
+ 		this.scene.scale(.2,.2,2);
  		this.cylinder.display();
  	this.scene.popMatrix();
+ 	
  	this.scene.pushMatrix();
- 		this.scene.scale(0.3,1,.5);
- 		this.scene.rotate(-Math.PI/2,1,0,0);
- 		this.scene.translate(0,-5,0.25);
- 		this.cylinder.display();
- 		this.scene.translate(0,0,.8);
- 		this.circle.display();
- 	this.scene.popMatrix();
- 	this.scene.pushMatrix();
- 		this.scene.scale(0.9/2,1.2/2,0.6);
+ 		this.scene.scale(.2,.2,.2);
  		this.scene.rotate(Math.PI,0,0,1);
- 		this.scene.translate(0,0,4.08/.6);
+ 		this.scene.translate(0,0,10);
  		this.sphere.display();
  	this.scene.popMatrix();	
  	this.scene.pushMatrix();
- 		this.scene.scale(0.9/2,1.2/2,0.6);
+ 		this.scene.scale(.2,.2,.2);
  		this.scene.rotate(Math.PI, 1,0,0);
  		this.sphere.display();
  	this.scene.popMatrix();	
@@ -97,17 +90,16 @@ var currTime, isChangingHeight, vertRot, currVertRot;
 	//Left
 		this.scene.pushMatrix();
 			this.scene.rotate(this.currHorizontalRudder*degToRad, 1,0,0);
-			this.scene.translate(.8,0,-0.3);
-			this.scene.scale(.5,0.1,.3);
-			this.scene.translate(0,-0.5,0);
+			this.scene.translate(.3,0,0);
+			this.scene.scale(.5,0.05,.15);
 			this.trapeze.display();
 		this.scene.popMatrix();
 	//Right
 		this.scene.pushMatrix();
 			this.scene.rotate(this.currHorizontalRudder*degToRad, 1,0,0);
 			this.scene.rotate(Math.PI,0,0,1);
-			this.scene.translate(.8,0,-0.3);
-			this.scene.scale(.5,0.1,.3);
+			this.scene.translate(.3,0,0);
+			this.scene.scale(.5,0.05,.15);
 			this.scene.translate(0,-0.5,0);
 			this.trapeze.display();
 		this.scene.popMatrix();
@@ -115,118 +107,30 @@ var currTime, isChangingHeight, vertRot, currVertRot;
 		this.scene.pushMatrix();
 			this.scene.rotate(this.currRudderTurn * degToRad, 0,1,0);
 			this.scene.rotate(Math.PI/2,0,0,1);
-			this.scene.translate(.8,0,-0.3);
-			this.scene.scale(.5,0.1,.3);
-			this.scene.translate(0,-0.5,0);
+			this.scene.translate(.3,0,0);
+			this.scene.scale(.5,0.05,.15);
+			
+			//this.scene.translate(0,0,0);
 			this.trapeze.display();
 		this.scene.popMatrix();
 	//Down
 		this.scene.pushMatrix();
 			this.scene.rotate(this.currRudderTurn * degToRad, 0,1,0);
 			this.scene.rotate(-Math.PI/2,0,0,1);
-			this.scene.translate(.8,0,-0.3);
-			this.scene.scale(.5,1/20,.3);
-			this.scene.translate(0,-0.5,0);
-			this.trapeze.display();
-		this.scene.popMatrix();
-		this.scene.pushMatrix();
-			this.scene.translate(.4,.9,2.6);
-			this.scene.rotate(Math.PI,1,0,0);
-			this.scene.scale(.4,0.1,.3);
-			this.scene.translate(0,-0.5,0);
-			this.trapeze.display();
-		this.scene.popMatrix();
-		this.scene.pushMatrix();
-			this.scene.translate(-.4,.9,2.6);
-			this.scene.rotate(-Math.PI,1,0,0);
-			this.scene.rotate(-Math.PI,0,0,1);
-			this.scene.scale(.4,0.1,.5);
+			this.scene.translate(.3,0,0);
+			this.scene.scale(.5,0.05,.15);
 			this.scene.translate(0,-0.5,0);
 			this.trapeze.display();
 		this.scene.popMatrix();
 	this.scene.popMatrix();
 
-	// Propellers
 	
-	this.scene.pushMatrix();
-		this.scene.pushMatrix();
-			this.scene.translate(.579,-0.35,0.32);
-			this.scene.scale(0.2,0.2, 0.1);
-			this.cylinder.display();
-			this.innerCylinder.display();
-			this.scene.scale(0.2,0.2,.4);
-			this.scene.translate(0,0,0.5);
-			this.cylinder.display();
-			this.innerCylinder.display();
-		this.scene.popMatrix();
-		this.scene.pushMatrix();
-			this.scene.translate(-.579,-0.35,0.32);
-			this.scene.scale(0.2,0.2, 0.1);
-			this.cylinder.display();
-			this.innerCylinder.display();
-			this.scene.scale(0.2,0.2,.4);
-			this.scene.translate(0,0,0.5);
-			this.cylinder.display();
-			this.innerCylinder.display();
-		this.scene.popMatrix();
-
-		//this.scene.rotate(Math.PI/2,0,0,1);
-
-		this.scene.pushMatrix();
-			this.scene.translate(-.579,-0.35,-0.14);
-			this.scene.rotate(this.turbRot * degToRad,0,0,1);
-			this.scene.scale(0.07,0.35,1);
-			this.quad.display();
-		this.scene.popMatrix();
-		this.scene.pushMatrix();
-			this.scene.translate(.579,-0.35,-0.14);
-			this.scene.rotate(this.turbRot * degToRad,0,0,1);
-			this.scene.scale(0.07,0.35,1);
-			this.scene.rotate(Math.PI/2,0,0,1);
-			this.quad.display();
-		this.scene.popMatrix();
-		this.scene.pushMatrix();
-			this.scene.translate(.579,-0.35,.85);
-			this.scene.rotate(this.turbRot * degToRad,0,0,1);
-
-			this.scene.scale(0.07,0.35,1);
-			this.scene.rotate(Math.PI,1,0,0);
-			this.quad.display();
-		this.scene.popMatrix();
-		this.scene.pushMatrix();
-			this.scene.translate(-.579,-0.35,.85);	
-			this.scene.rotate(this.turbRot * degToRad,0,0,1);
-
-			this.scene.scale(0.07,0.35,1);
-			this.scene.rotate(Math.PI,1,0,0);
-			this.quad.display();
-		this.scene.popMatrix();
-		
-	this.scene.popMatrix();
-
-	// Periscope
-
-	this.scene.pushMatrix();
-		this.scene.pushMatrix();
-			this.scene.translate(0,0.9 + this.currPeriscopeY,2.65);
-			this.scene.scale(0.05,.9,0.05);
-			this.scene.rotate(-Math.PI/2,1,0,0);
-			this.cylinder.display();
-			this.innerCylinder.display();
-		this.scene.popMatrix();
-		this.scene.pushMatrix();
-			this.scene.translate(0,1.8 + this.currPeriscopeY,2.6);
-			this.scene.scale(0.05,.05,0.3);
-			this.cylinder.display();
-			this.innerCylinder.display();
-			this.scene.popMatrix();
-	this.scene.popMatrix();
 
  };
 
 
 
-MySubmarine.prototype.swim = function() {
+MyTorpedo.prototype.swim = function() {
 
 	if(this.isChangingHeight != 0) {
 		if (this.isChangingHeight > 0) {
@@ -264,19 +168,8 @@ MySubmarine.prototype.swim = function() {
 }
 
 
-MySubmarine.prototype.swimSub = function(swim) {
-	this.speed = this.speed + swim;
-	
-}
 
-MySubmarine.prototype.turbinesRotation = function(now) {
-	var deltaTime = now - this.currTime;
-	this.turbSpeed = (this.speed/3)*(360/60);
-	this.currTime = now;
-	
-}
-
-MySubmarine.prototype.turnSub = function(speed) {
+MyTorpedo.prototype.turnSub = function(speed) {
 	this.rudderTurn = -this.scene.speed * 6;
 	if (this.speed >=  0) 
 		this.currTurn = + speed;
@@ -284,12 +177,10 @@ MySubmarine.prototype.turnSub = function(speed) {
 		this.currTurn = -speed;
 }
 
-MySubmarine.prototype.returnToNormal = function() {
+MyTorpedo.prototype.returnToNormal = function() {
 	this.currTurn = 0;
 	this.rudderTurn = 0;
 }
 
-MySubmarine.prototype.changePeriscope = function(height) {
-	this.periscopeY = height/9;
-}
+
 

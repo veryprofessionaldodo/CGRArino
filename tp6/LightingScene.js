@@ -40,6 +40,8 @@ LightingScene.prototype.init = function(application) {
 	this.materialDefault = new CGFappearance(this);
 	this.oceanFloor = new MyQuad(this, -0.5,1.5,-1,1);
 	this.trapeze = new MyTrapeze(this);
+	this.target = new MyTarget(this);
+	this.torpedo = new MyTorpedo(this);
 
 	this.hand2Appearance = new CGFappearance(this);
 	this.hand2Appearance.setAmbient(0.3,0.3,0.3,1);
@@ -61,7 +63,6 @@ LightingScene.prototype.init = function(application) {
 	this.handAppearance.setSpecular(0.8,0.8,0.8,1);	
 	this.handAppearance.setShininess(120);
 	
-	
 	this.cleckAppearance = new CGFappearance(this);
 	this.cleckAppearance.setAmbient(0.3,0.3,0.3,1);
 	this.cleckAppearance.setDiffuse(0.6,0.6,0.6,1);
@@ -69,7 +70,15 @@ LightingScene.prototype.init = function(application) {
 	this.cleckAppearance.setShininess(120);
 	this.cleckAppearance.loadTexture("../resources/images/cleck.png");
 	this.cleckAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
-	this.setUpdatePeriod(100);
+	
+	this.targetAppearance = new CGFappearance(this);
+	this.targetAppearance.setAmbient(0.3,0.3,0.3,1);
+	this.targetAppearance.setDiffuse(0.6,0.6,0.6,1);
+	this.targetAppearance.setSpecular(0.8,0.8,0.8,1);	
+	this.targetAppearance.setShininess(120);
+	this.targetAppearance.loadTexture("../resources/images/target.jpg");
+	this.targetAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
+	
 
 	this.oceanAppearance = new CGFappearance(this);
 	this.oceanAppearance.setAmbient(0.7,0.7,0.7,1);
@@ -163,9 +172,8 @@ LightingScene.prototype.display = function() {
 		this.reckAppearance.apply();
 		this.rotate(-90 * degToRad, 1, 0, 0);
 		this.scale(1, 1, 8);
-
-		
 	this.popMatrix();
+
 	this.pushMatrix();
 		this.cleckAppearance.apply();
 		this.scale(0.7,0.7,1)
@@ -189,6 +197,25 @@ LightingScene.prototype.display = function() {
 		this.oceanFloor.display();
 	this.popMatrix();
 
+	//Targets
+
+	this.pushMatrix();
+		this.targetAppearance.apply();
+		this.translate(7,-3,6);
+		this.rotate(Math.PI/3,0,1,0);
+		this.scale(1,1,0.1);
+		this.target.display();
+	this.popMatrix();
+
+	this.pushMatrix();
+		this.targetAppearance.apply();
+		this.translate(-13,-3,-19);
+		this.rotate(Math.PI/5,0,1,0);
+		this.scale(1,1,0.1);
+		this.target.display();
+	this.popMatrix();
+
+	this.torpedo.display();
 	//Sub
 
 	this.pushMatrix();
@@ -197,13 +224,12 @@ LightingScene.prototype.display = function() {
 		this.submarine.swim();
 		var time = Date.now();
 		this.submarine.turbinesRotation(time);
-		//this.submarine.continue();
+		
 		this.pushMatrix();
-			
 			this.rotate(this.submarine.rotY * degToRad, 0,1,0);
-			//this.steelAppearance.apply();
-			this.submarine.display();
+		//	this.submarine.display();
 		this.popMatrix();
+
 		this.translate(0,0,5);
 		this.scale(3,.1,1);
 	this.popMatrix();
