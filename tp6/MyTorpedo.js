@@ -127,6 +127,8 @@
 		this.scene.targets[0].z,
  	];
 
+ 	//console.log(this.P4[0] + " " + this.P4[1]+ "  " + this.P4[2]);
+
  	var vector = [
 		this.P4[0]-this.x,
 		this.P4[1]-this.y,
@@ -134,6 +136,8 @@
  	];
 
  	return vector;
+
+
  };
 
 
@@ -168,7 +172,7 @@
 
  	var vector = this.getVector();
  	var distance = this.getTargetDistance();
- 	this.firingTime = parseInt(distance);
+ 	this.firingTime = distance;
  	//console.log("firing time:" + this.firingTime);
 
  	this.P2 = [
@@ -178,9 +182,15 @@
  		this.z+1,
  	]
 
+	var p3y;
+
+	if (this.scene.targets[0].y > this.scene.submarine.posY)
+		p3y = -1;
+	else 
+		p3y = 1;
  	this.P3 = [
 		this.scene.targets[0].x,
-		this.scene.targets[0].y + 1,
+		this.scene.targets[0].y + p3y,
 		this.scene.targets[0].z,
  	]
 
@@ -209,7 +219,7 @@
  
 
  	if(this.launch){
-		if(this.t <= 1){
+		if(this.t <= 1.0){
 
 			var t = this.t;
 
@@ -219,9 +229,11 @@
 			
 			this.z = Math.pow((1-t), 3)*this.z + 3*t*Math.pow(1-t,2)*this.P2[2] + 3*Math.pow(t,2)*(1-t)*this.P3[2] + Math.pow(t,3)*this.P4[2];                             
 		
-			this.t += 1/(this.firingTime*100);
-		
-			console.log(this.t + "," + this.x + "," + this.y + "," + this.z);
+			this.t += 1.0/(this.firingTime * 100);
+
+			console.log(this.firingTime);
+
+			//console.log(this.t + "," + this.x + "," + this.y + "," + this.z);
 		
 		}
 

@@ -32,6 +32,8 @@ LightingScene.prototype.init = function(application) {
 	this.gl.enable(this.gl.DEPTH_TEST);
 	this.gl.enable(this.gl.CULL_FACE);
 	this.gl.depthFunc(this.gl.LEQUAL);
+	this.gl.enable(this.gl.BLEND);
+    this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
 
 	this.axis = new CGFaxis(this);
 	this.submarine = new MySubmarine(this);
@@ -43,7 +45,7 @@ LightingScene.prototype.init = function(application) {
 	this.target = new MyTarget(this);
 	this.torpedo = new MyTorpedo(this);
 	this.target1 = new MyTarget(this, 5, -1, 10);
-	this.target2 = new MyTarget(this, -5, 0, 13);
+	this.target2 = new MyTarget(this, -6, -5, 13);
 	this.targets = [this.target2, this.target1];
 	this.torpedo = new MyTorpedo(this, this.submarine.posX, this.submarine.posY-.8, this.submarine.posZ+2.2, Math.PI);
 
