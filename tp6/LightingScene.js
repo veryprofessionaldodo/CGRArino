@@ -207,13 +207,13 @@ LightingScene.prototype.display = function() {
 
 	this.pushMatrix();
 		this.materialDefault.apply();
-		this.translate(this.submarine.posX,this.submarine.posY,this.submarine.posZ);
+		this.translate(this.submarine.posX,this.submarine.posY,
+		this.submarine.posZ);
 		this.submarine.swim();
 		var time = Date.now();
 		this.submarine.turbinesRotation(time);
 	
 		this.pushMatrix();
-			this.rotate(this.submarine.rotY * degToRad, 0,1,0);
 		    this.submarine.display();
 		this.popMatrix();
 	

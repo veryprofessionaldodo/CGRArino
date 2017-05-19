@@ -62,8 +62,21 @@ var currTime, isChangingHeight, vertRot, currVertRot;
  	this.submarineAppearances[this.scene.currSubmarineAppearance].apply();
 
  	// Body
- 	this.scene.rotate(this.currVertRot * degToRad,1,0,0);
+	/*this.scene.rotate(this.currVertRot * degToRad,1,0,0);
+	
+	//console.log( Math.sin(this.currVertRot*degToRad) + " " + Math.cos(this.currVertRot.degToRad));
 
+	this.scene.rotate(this.rotY * degToRad, 
+	Math.sin(this.currVertRot*degToRad), 
+	Math.cos(this.currVertRot * degToRad),0);
+
+ 	//
+ 	*/
+ 	this.scene.rotate(this.rotY * degToRad,0,1,0);
+
+ 	this.scene.rotate(this.currVertRot * degToRad, 1, 0, 0);
+
+ 	this.scene.translate(0,0,-2);
 
  	this.scene.pushMatrix();
  		this.scene.scale(0.9/2,1.2/2,4.08);
@@ -95,7 +108,7 @@ var currTime, isChangingHeight, vertRot, currVertRot;
 	this.scene.pushMatrix();
 	//Left
 		this.scene.pushMatrix();
-			this.scene.rotate(this.currHorizontalRudder*degToRad, 1,0,0);
+			this.scene.rotate(-this.currHorizontalRudder*degToRad, 1,0,0);
 			this.scene.translate(.8,0,-0.3);
 			this.scene.scale(.5,0.1,.3);
 			this.scene.translate(0,-0.5,0);
@@ -103,7 +116,7 @@ var currTime, isChangingHeight, vertRot, currVertRot;
 		this.scene.popMatrix();
 	//Right
 		this.scene.pushMatrix();
-			this.scene.rotate(this.currHorizontalRudder*degToRad, 1,0,0);
+			this.scene.rotate(-this.currHorizontalRudder*degToRad, 1,0,0);
 			this.scene.rotate(Math.PI,0,0,1);
 			this.scene.translate(.8,0,-0.3);
 			this.scene.scale(.5,0.1,.3);
@@ -246,18 +259,22 @@ MySubmarine.prototype.swim = function() {
 
 	this.currHorizontalRudder = this.currHorizontalRudder +
 	 (this.horizontalRudder-this.currHorizontalRudder)/7;
+	
+	this.currRudderTurn = this.currRudderTurn + 
+	 (this.rudderTurn- this.currRudderTurn)/7;
 
 	this.currSpeed = this.currSpeed + (this.speed - this.currSpeed)/15;
 	this.posX = this.posX + (0.01*this.currSpeed)*Math.cos(this.vertRot * degToRad)
 	*Math.sin(this.rotY * degToRad);//(swim/2 * Math.cos(this.rotY-90));
 	this.posZ = this.posZ + (0.01*this.currSpeed)*Math.cos(this.vertRot * degToRad)
 	*Math.cos((this.rotY) * degToRad);//(swim/2 * Math.sin(this.rotY-90));
-	this.posY = this.posY + (0.01*this.currSpeed)*-Math.sin(this.vertRot * degToRad);//(swim/2 * Math.cos(this.rotY-90));
+	this.posY = this.posY + (0.01*this.currSpeed)*-Math.sin(this.vertRot * degToRad);
+	//(swim/2 * Math.cos(this.rotY-90));
 	
 
 
 	this.turbRot = this.turbRot + this.turbSpeed;
-	this.currRudderTurn = this.currRudderTurn + (this.rudderTurn- this.currRudderTurn)/7;
+	
 
 	this.currPeriscopeY = this.currPeriscopeY + (this.periscopeY - this.currPeriscopeY)/20;
 }
@@ -276,10 +293,10 @@ MySubmarine.prototype.turbinesRotation = function(now) {
 }
 
 MySubmarine.prototype.turnSub = function(speed) {
-	this.rudderTurn = -this.scene.speed * 6;
-	if (this.speed >=  0) 
-		this.currTurn = + speed;
-	else 
+	this.rudderTurn = -speed * 6;
+	if (this.speed >= 0)
+		this.currTurn = speed;
+	else
 		this.currTurn = -speed;
 }
 
@@ -291,4 +308,3 @@ MySubmarine.prototype.returnToNormal = function() {
 MySubmarine.prototype.changePeriscope = function(height) {
 	this.periscopeY = height/9;
 }
-
