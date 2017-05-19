@@ -213,7 +213,6 @@ LightingScene.prototype.display = function() {
 		this.submarine.turbinesRotation(time);
 	
 		this.pushMatrix();
-			this.rotate(this.submarine.rotY * degToRad, 0,1,0);
 		    this.submarine.display();
 		this.popMatrix();
 	
