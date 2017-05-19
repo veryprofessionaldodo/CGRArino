@@ -113,7 +113,7 @@
 
     if (this.scene.submarine.speed != 0){
         this.x = y;
-        this.y = y - 1.1;
+        this.y = y - 0.8;
         this.z = z;
     }
  };
@@ -161,9 +161,7 @@
  		return "All targets eliminated.";
  	}
 	
-	//this.submarineStopped = true;
-
- 	//this.rotation= true;
+	
  	this.launch = true;
  	this.timePassed = 0;
 
@@ -171,17 +169,19 @@
  	var vector = this.getVector();
  	var distance = this.getTargetDistance();
  	this.firingTime = parseInt(distance);
+ 	//console.log("firing time:" + this.firingTime);
 
  	this.P2 = [
-		6/7 * vector[0] + this.x,
-		vector[1] + this.y,
-		6/7 * vector[2] + this.z,
+		/*4/5 * vector[0] + */this.x,
+		/*vector[1]*/ this.y,
+		//4/5 * vector[2] + this.z,
+ 		this.z+1,
  	]
 
  	this.P3 = [
-		vector[0] + this.x,
-		6/7 * vector[1]+this.y,
-		vector[2] + this.z,
+		this.scene.targets[0].x,
+		this.scene.targets[0].y + 1,
+		this.scene.targets[0].z,
  	]
 
 
@@ -189,8 +189,11 @@
 
  MyTorpedo.prototype.update = function(currTime){
  	
- 	var dt = currTime - this.timePassed;
-	/*
+ 	/*
+	this.lastime = this.lastime || currTime;
+ 	var dt = currTime - this.lastime;
+	this.lastime = currTime;
+	
  	if(this.rotation){
 		var totalRotation = this.getRotationAngle();
 
@@ -203,8 +206,10 @@
  		this.timePassed = 0;
  	}
 	*/
+ 
+
  	if(this.launch){
-		while(this.t <= 1){
+		if(this.t <= 1){
 
 			var t = this.t;
 
@@ -215,9 +220,12 @@
 			this.z = Math.pow((1-t), 3)*this.z + 3*t*Math.pow(1-t,2)*this.P2[2] + 3*Math.pow(t,2)*(1-t)*this.P3[2] + Math.pow(t,3)*this.P4[2];                             
 		
 			this.t += 1/(this.firingTime*100);
+		
+			console.log(this.t + "," + this.x + "," + this.y + "," + this.z);
+		
 		}
 
-		this.bezier = false;
+		this.launch = false;
  	}
 
  	this.timePassed = currTime;

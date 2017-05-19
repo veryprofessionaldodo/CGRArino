@@ -44,7 +44,7 @@ LightingScene.prototype.init = function(application) {
 	this.torpedo = new MyTorpedo(this);
 	this.target1 = new MyTarget(this, 5, -1, 10);
 	this.target2 = new MyTarget(this, -5, 0, 13);
-	this.targets = [this.target1, this.target2];
+	this.targets = [this.target2, this.target1];
 	this.torpedo = new MyTorpedo(this, this.submarine.posX, this.submarine.posY-.8, this.submarine.posZ+2.2, Math.PI);
 
 
@@ -164,7 +164,7 @@ LightingScene.prototype.display = function() {
 	// Update all lights used
 	this.updateLights();
 	
-	
+	this.scale(2,2,2);
 	
 	this.pushMatrix(); 
 		this.reckAppearance.apply();
@@ -213,6 +213,7 @@ LightingScene.prototype.display = function() {
 		this.submarine.turbinesRotation(time);
 	
 		this.pushMatrix();
+			this.rotate(this.submarine.rotY * degToRad, 0,1,0);
 		    this.submarine.display();
 		this.popMatrix();
 	
@@ -221,8 +222,9 @@ LightingScene.prototype.display = function() {
 	this.popMatrix();
 	
 	//Torpedo
+
+	this.torpedo.readyToFire();
 	this.pushMatrix();
-		this.torpedo.readyToFire();
 		this.translate(this.torpedo.x, this.torpedo.y, this.torpedo.z);
 		this.torpedo.display();
 	this.popMatrix();
