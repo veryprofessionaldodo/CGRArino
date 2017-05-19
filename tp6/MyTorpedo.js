@@ -3,28 +3,7 @@
  * @constructor
  */
 
-var rotY, posX, posY, currSpeed, currTurn;
-var speed, turbRot, periscopeY , currPeriscopeY;
-var rudderTurn, currRudderTurn, horizontalRudder, currHorizontalRudder;
-var currTime, isChangingHeight, vertRot, currVertRot;
-
-
- function MyTorpedo(scene) {
- 	this.currTime = 0; this.rudderTurn = 0; this.currRudderTurn = 0;
- 	this.periscopeY = 0; 
- 	this.currHorizontalRudder = 0; this.horizontalRudder = 0;
- 	this.currPeriscopeY = 0;
- 	this.rotY = 0;
- 	this.currVertRot = 0;
- 	this.vertRot = 0;
- 	this.turbRot = 0;
- 	this.turbSpeed = 0;
- 	this.isChangingHeight = 0;
- 	this.posY = 0;
- 	this.currSpeed = 0; // CurrentSpeed
- 	this.speed = 0; // Final Speed value
- 	this.currTurn = 0;
- 	this.posX = 0; 	this.currPosY = 0; 	this.posZ = 0;
+ function MyTorpedo(scene, x, y, z, angle) {
  	this.cylinder = new MyCylinder(scene, 20,20);
 	this.sphere = new MySphere(scene,20,20);
  	CGFobject.call(this,scene);
@@ -34,24 +13,29 @@ var currTime, isChangingHeight, vertRot, currVertRot;
 	this.trapeze = new MyTrapeze(scene);
 	this.quad = new MyQuad(scene);
 	
-	this.submarineAppearances = [];
-
-	var steelAppearance = new CGFappearance(this.scene);
-	steelAppearance.loadTexture("../resources/images/steel.jpg");
-	this.submarineAppearances.push(steelAppearance);
-
-	var monaLisaAppearance = new CGFappearance(this.scene);
-	monaLisaAppearance.loadTexture("../resources/images/monalisa.jpg");
-	this.submarineAppearances.push(monaLisaAppearance);
-
-	var cageAppearance = new CGFappearance(this.scene);
-	cageAppearance.loadTexture("../resources/images/cage.png");
-	this.submarineAppearances.push(cageAppearance);
+	this.steelAppearance = new CGFappearance(this.scene);
+	this.steelAppearance.loadTexture("../resources/images/steel.jpg");
 	
-	var poolBallAppearance = new CGFappearance(this.scene);
-	poolBallAppearance.loadTexture("../resources/images/poolball.jpg");
-	this.submarineAppearances.push(poolBallAppearance);
+	this.x = x;
+	this.y = y;
+	this.z = z;
+
+	this.angle1 = angle;
+	this.angle2 = 0;
+	this.orientation = 0;
+
+	this.P2;
+	this.P3;	
+	this.P4;
+	this.t = 0;
 	
+	//this.submarineStopped = false;
+
+	//this.rotation = false;
+	this.launch = false;
+	this.timePassed;
+
+	this.firingTime;
 
 };
 
@@ -59,10 +43,10 @@ var currTime, isChangingHeight, vertRot, currVertRot;
  MyTorpedo.prototype.constructor = MyTorpedo;
 
  MyTorpedo.prototype.display = function() {
- 	this.submarineAppearances[this.scene.currSubmarineAppearance].apply();
-
+ 	
+	this.steelAppearance.apply();
  	// Body
- 	this.scene.rotate(this.currVertRot * degToRad,1,0,0);
+ 	//this.scene.rotate(this.currVertRot * degToRad,1,0,0);
  	this.scene.translate(0,0,-2);
 
 
@@ -89,14 +73,12 @@ var currTime, isChangingHeight, vertRot, currVertRot;
 	this.scene.pushMatrix();
 	//Left
 		this.scene.pushMatrix();
-			this.scene.rotate(this.currHorizontalRudder*degToRad, 1,0,0);
 			this.scene.translate(.3,0,0);
 			this.scene.scale(.5,0.05,.15);
 			this.trapeze.display();
 		this.scene.popMatrix();
 	//Right
 		this.scene.pushMatrix();
-			this.scene.rotate(this.currHorizontalRudder*degToRad, 1,0,0);
 			this.scene.rotate(Math.PI,0,0,1);
 			this.scene.translate(.3,0,0);
 			this.scene.scale(.5,0.05,.15);
@@ -105,7 +87,6 @@ var currTime, isChangingHeight, vertRot, currVertRot;
 		this.scene.popMatrix();
 	//Up
 		this.scene.pushMatrix();
-			this.scene.rotate(this.currRudderTurn * degToRad, 0,1,0);
 			this.scene.rotate(Math.PI/2,0,0,1);
 			this.scene.translate(.3,0,0);
 			this.scene.scale(.5,0.05,.15);
@@ -115,7 +96,6 @@ var currTime, isChangingHeight, vertRot, currVertRot;
 		this.scene.popMatrix();
 	//Down
 		this.scene.pushMatrix();
-			this.scene.rotate(this.currRudderTurn * degToRad, 0,1,0);
 			this.scene.rotate(-Math.PI/2,0,0,1);
 			this.scene.translate(.3,0,0);
 			this.scene.scale(.5,0.05,.15);
@@ -127,60 +107,124 @@ var currTime, isChangingHeight, vertRot, currVertRot;
 	
 
  };
-
-
-
-MyTorpedo.prototype.swim = function() {
-
-	if(this.isChangingHeight != 0) {
-		if (this.isChangingHeight > 0) {
-			this.horizontalRudder = this.scene.speed * 10; 
-			this.vertRot = this.vertRot + 1;
-		}
-		else if (this.isChangingHeight < 0) {
-			this.horizontalRudder = -this.scene.speed * 10; 
-			this.vertRot = this.vertRot -1;
-		}
-	}
-	else
-		this.horizontalRudder = 0;
-
-	this.currVertRot = this.currVertRot + (this.vertRot - this.currVertRot)/13;
-
-	this.rotY = this.rotY+(this.currTurn/5);
-
-	this.currHorizontalRudder = this.currHorizontalRudder +
-	 (this.horizontalRudder-this.currHorizontalRudder)/7;
-
-	this.currSpeed = this.currSpeed + (this.speed - this.currSpeed)/13;
-	this.posX = this.posX + (0.01*this.currSpeed)*Math.cos(this.vertRot * degToRad)
-	*Math.sin(this.rotY * degToRad);//(swim/2 * Math.cos(this.rotY-90));
-	this.posZ = this.posZ + (0.01*this.currSpeed)*Math.cos(this.vertRot * degToRad)
-	*Math.cos((this.rotY) * degToRad);//(swim/2 * Math.sin(this.rotY-90));
-	this.posY = this.posY + (0.01*this.currSpeed)*-Math.sin(this.vertRot * degToRad);//(swim/2 * Math.cos(this.rotY-90));
 	
+ 
+ MyTorpedo.prototype.updatePosition = function(posX, posY, posZ){
+
+    if (this.scene.submarine.speed != 0){
+        this.x = y;
+        this.y = y - 1.1;
+        this.z = z;
+    }
+ };
 
 
-	this.turbRot = this.turbRot + this.turbSpeed;
-	this.currRudderTurn = this.currRudderTurn + (this.rudderTurn- this.currRudderTurn)/7;
+ MyTorpedo.prototype.getVector = function(){
 
-	this.currPeriscopeY = this.currPeriscopeY + (this.periscopeY - this.currPeriscopeY)/20;
-}
+ 	this.P4 = [
+		this.scene.targets[0].x,
+		this.scene.targets[0].y,
+		this.scene.targets[0].z,
+ 	];
+
+ 	var vector = [
+		this.P4[0]-this.x,
+		this.P4[1]-this.y,
+		this.P4[2]-this.z,	
+ 	];
+
+ 	return vector;
+ };
+
+
+ MyTorpedo.prototype.getTargetDistance = function(){
+ 	var vector = this.getVector();
+
+ 	return Math.sqrt(Math.pow(vector[0],2)+ Math.pow(vector[1],2) + Math.pow(vector[2],2));
+ };
+/*
+ MyTorpedo.prototype.getRotationAngle = function(){
+
+ 	var vector = this.getVector();
+ 	var distance = this.getTargetDistance();
+ 	var angle = Math.acos(vector[2]/distance);
+
+ 	if(vector[0] >= 0)
+ 		return angle;
+ 	else
+ 		return 2*Math.PI-angle;
+ };
+*/
+ MyTorpedo.prototype.readyToFire = function(){
+ 	
+ 	if(this.scene.targets.length == 0){
+ 		return "All targets eliminated.";
+ 	}
+	
+	//this.submarineStopped = true;
+
+ 	//this.rotation= true;
+ 	this.launch = true;
+ 	this.timePassed = 0;
+
+
+ 	var vector = this.getVector();
+ 	var distance = this.getTargetDistance();
+ 	this.firingTime = parseInt(distance);
+
+ 	this.P2 = [
+		6/7 * vector[0] + this.x,
+		vector[1] + this.y,
+		6/7 * vector[2] + this.z,
+ 	]
+
+ 	this.P3 = [
+		vector[0] + this.x,
+		6/7 * vector[1]+this.y,
+		vector[2] + this.z,
+ 	]
+
+
+ };
+
+ MyTorpedo.prototype.update = function(currTime){
+ 	
+ 	var dt = currTime - this.timePassed;
+	/*
+ 	if(this.rotation){
+		var totalRotation = this.getRotationAngle();
+
+ 		while(this.angle1 > totalRotation){
+ 			this.angle1 += totalRotation/10;
+ 		}
+
+ 		this.rotation = false;
+ 		this.bezier = true;
+ 		this.timePassed = 0;
+ 	}
+	*/
+ 	if(this.launch){
+		while(this.t <= 1){
+
+			var t = this.t;
+
+			this.x = Math.pow((1-t), 3)*this.x + 3*t*Math.pow(1-t,2)*this.P2[0] + 3*Math.pow(t,2)*(1-t)*this.P3[0] + Math.pow(t,3)*this.P4[0];
+			
+			this.y = Math.pow((1-t), 3)*this.y + 3*t*Math.pow(1-t,2)*this.P2[1] + 3*Math.pow(t,2)*(1-t)*this.P3[1] + Math.pow(t,3)*this.P4[1];
+			
+			this.z = Math.pow((1-t), 3)*this.z + 3*t*Math.pow(1-t,2)*this.P2[2] + 3*Math.pow(t,2)*(1-t)*this.P3[2] + Math.pow(t,3)*this.P4[2];                             
+		
+			this.t += 1/(this.firingTime*100);
+		}
+
+		this.bezier = false;
+ 	}
+
+ 	this.timePassed = currTime;
+ };
 
 
 
-MyTorpedo.prototype.turnSub = function(speed) {
-	this.rudderTurn = -this.scene.speed * 6;
-	if (this.speed >=  0) 
-		this.currTurn = + speed;
-	else 
-		this.currTurn = -speed;
-}
-
-MyTorpedo.prototype.returnToNormal = function() {
-	this.currTurn = 0;
-	this.rudderTurn = 0;
-}
 
 
 

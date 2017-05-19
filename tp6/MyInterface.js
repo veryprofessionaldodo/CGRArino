@@ -28,9 +28,7 @@ MyInterface.prototype.init = function(application) {
 	// the first parameter is the object that is being controlled (in this case the scene)
 	// the identifier 'doSomething' must be a function declared as part of that object (i.e. a member of the scene class)
 	// e.g. LightingScene.prototype.doSomething = function () { console.log("Doing something..."); }; 
-
-	this.gui.add(this.scene, 'doSomething');	
-
+	this.gui.add(this.scene, 'clock');
 	// add a group of controls (and open/expand by defult)
 	
 	var group=this.gui.addFolder("Options");
@@ -41,7 +39,7 @@ MyInterface.prototype.init = function(application) {
 	
 	group.add(this.scene, 'light0');
 	group.add(this.scene, 'light1');
-	group.add(this.scene, 'clock');
+	
 	
 	// add a slider
 	// must be a numeric variable of the scene, initialized in scene.init e.g.
@@ -88,7 +86,13 @@ MyInterface.prototype.processKeyDown = function(event) {
 		this.scene.submarine.isChangingHeight = this.scene.speed;
 	if (event.keyCode == 81) 
 		this.scene.submarine.isChangingHeight = -this.scene.speed;
-	console.log(event.keyCode + " ");
+	if (event.keyCode == 70){
+		console.log("trabalha crl");
+		this.scene.torpedo.readyToFire();
+	}
+
+	
+		
 	
 };
 
@@ -107,6 +111,7 @@ MyInterface.prototype.processKeyUp = function(event) {
 
 	if (event.keyCode == 69 || event.keyCode == 81) 
 		this.scene.submarine.isChangingHeight = 0;
+
 	
 
 	

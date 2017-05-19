@@ -4,9 +4,10 @@
  */
  function MyCylinder(scene, slices, stacks) {
  	CGFobject.call(this,scene);
-	
+
 	this.slices = slices;
 	this.stacks = stacks;
+
  	this.initBuffers();
  };
 
@@ -14,39 +15,34 @@
  MyCylinder.prototype.constructor = MyCylinder;
 
  MyCylinder.prototype.initBuffers = function() {
- 	var theta = 2*Math.PI/this.slices;
-	this.vertices = [];
-	this.normals = [];
-	this.texCoords = [];
-	//var i;
-	
-	for (var j = 0; j <= this.stacks ; j++) {
-		for(var i = 0; i < this.slices; i++)
- 		{
- 			var height = (1 / this.stacks);
- 			this.vertices.push(Math.cos(i*theta), Math.sin(i*theta), j*height);
- 			this.texCoords.push(i/this.slices,j/this.stacks);
- 			this.normals.push(Math.cos(i*theta), Math.sin(i*theta), 0);
-		}
- 	}
- 	
+
+  this.indices = [];
+  this.vertices = [];
+  this.normals = [];
+  this.texCoords = [];
+
+  var angularStep = (2*Math.PI)/this.slices;
+  var s = 0, t = 0;
+
+  for (var i = 0; i <= this.stacks; i++) {
+	for (var j = 0; j < this.slices; j++) {
+    	this.vertices.push(Math.cos(j * angularStep), Math.sin(j * angularStep), i / this.stacks);
+		this.normals.push(Math.cos(j * angularStep), Math.sin(j * angularStep), 0);
+		this.texCoords.push(s, t);
+     	s += 1 / this.slices;
+	}
+    s = 0;
+    t += 1 / this.stacks;
+  }
 
 
- 	//height = 0;
- 	this.indices = [];
-	for(var i = 0; i < this.slices * this.stacks ; i++)
- 	{
- 		if ((i + 1) % this.slices != 0) {	
- 			this.indices.push(i,i+1, i + this.slices);
- 			this.indices.push(i+1,i+1+this.slices, i + this.slices);
- 		}
- 		else {
- 			this.indices.push(i, i+1-this.slices, i+this.slices);
- 			this.indices.push(i+1-this.slices, i+1, i+this.slices);
+  for (var i = 0; i < this.stacks; i++) {
+    for (var j = 0; j < this.slices; j++) {
+      this.indices.push(i * this.slices + j, i * this.slices + (j + 1) % this.slices, i * this.slices + (j + 1) % this.slices + this.slices);
+      this.indices.push(i * this.slices + j,  i * this.slices + (j + 1) % this.slices + this.slices, i * this.slices + j + this.slices);
+    }
+  }
 
- 		}
-  	}
-
- 	this.primitiveType = this.scene.gl.TRIANGLES;
- 	this.initGLBuffers();
- };
+  this.primitiveType = this.scene.gl.TRIANGLES;
+  this.initGLBuffers();
+};

@@ -51,7 +51,7 @@ var currTime, isChangingHeight, vertRot, currVertRot;
 	var poolBallAppearance = new CGFappearance(this.scene);
 	poolBallAppearance.loadTexture("../resources/images/poolball.jpg");
 	this.submarineAppearances.push(poolBallAppearance);
-	
+
 
 };
 
@@ -63,7 +63,6 @@ var currTime, isChangingHeight, vertRot, currVertRot;
 
  	// Body
  	this.scene.rotate(this.currVertRot * degToRad,1,0,0);
- 	this.scene.translate(0,0,-2);
 
 
  	this.scene.pushMatrix();
@@ -241,14 +240,14 @@ MySubmarine.prototype.swim = function() {
 	else
 		this.horizontalRudder = 0;
 
-	this.currVertRot = this.currVertRot + (this.vertRot - this.currVertRot)/13;
+	this.currVertRot += (this.vertRot - this.currVertRot)/13;
 
 	this.rotY = this.rotY+(this.currTurn/5);
 
 	this.currHorizontalRudder = this.currHorizontalRudder +
 	 (this.horizontalRudder-this.currHorizontalRudder)/7;
 
-	this.currSpeed = this.currSpeed + (this.speed - this.currSpeed)/13;
+	this.currSpeed = this.currSpeed + (this.speed - this.currSpeed)/15;
 	this.posX = this.posX + (0.01*this.currSpeed)*Math.cos(this.vertRot * degToRad)
 	*Math.sin(this.rotY * degToRad);//(swim/2 * Math.cos(this.rotY-90));
 	this.posZ = this.posZ + (0.01*this.currSpeed)*Math.cos(this.vertRot * degToRad)

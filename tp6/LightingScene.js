@@ -8,7 +8,7 @@ var BOARD_B_DIVISIONS = 100;
 
 var speed;
 var currTime, deltaTime;
-var light0, light1, clock;
+var light0, light1, run;
 
 function LightingScene() {
 	CGFscene.call(this);
@@ -22,7 +22,7 @@ LightingScene.prototype.constructor = LightingScene;
 LightingScene.prototype.init = function(application) {
 	CGFscene.prototype.init.call(this, application);
 	this.initCameras();
-	this.light0=true; this.light1=true; this.clock = true; this.speed=3;
+	this.light0=true; this.light1=true; this.run = true; this.speed=3;
 
 	this.initLights();
 	this.enableTextures(true);
@@ -42,6 +42,11 @@ LightingScene.prototype.init = function(application) {
 	this.trapeze = new MyTrapeze(this);
 	this.target = new MyTarget(this);
 	this.torpedo = new MyTorpedo(this);
+	this.target1 = new MyTarget(this, 5, -1, 10);
+	this.target2 = new MyTarget(this, -5, 0, 13);
+	this.targets = [this.target1, this.target2];
+	this.torpedo = new MyTorpedo(this, this.submarine.posX, this.submarine.posY-.8, this.submarine.posZ+2.2, Math.PI);
+
 
 	this.hand2Appearance = new CGFappearance(this);
 	this.hand2Appearance.setAmbient(0.3,0.3,0.3,1);
@@ -70,15 +75,6 @@ LightingScene.prototype.init = function(application) {
 	this.cleckAppearance.setShininess(120);
 	this.cleckAppearance.loadTexture("../resources/images/cleck.png");
 	this.cleckAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
-	
-	this.targetAppearance = new CGFappearance(this);
-	this.targetAppearance.setAmbient(0.3,0.3,0.3,1);
-	this.targetAppearance.setDiffuse(0.6,0.6,0.6,1);
-	this.targetAppearance.setSpecular(0.8,0.8,0.8,1);	
-	this.targetAppearance.setShininess(120);
-	this.targetAppearance.loadTexture("../resources/images/target.jpg");
-	this.targetAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
-	
 
 	this.oceanAppearance = new CGFappearance(this);
 	this.oceanAppearance.setAmbient(0.7,0.7,0.7,1);
@@ -87,6 +83,8 @@ LightingScene.prototype.init = function(application) {
 	this.oceanAppearance.setShininess(120);
 	this.oceanAppearance.loadTexture("../resources/images/ocean.jpg");
 	this.oceanAppearance.setTextureWrap("MIRRORED_REPEAT", "MIRORRED_REPEAT");
+	
+	this.setUpdatePeriod(100);
 	
 	this.currSubmarineAppearance = 0;
 	this.submarineAppearanceList = {'steel': 0, 'artsy': 1, 'cage': 2, 'poolball': 3};
@@ -198,24 +196,13 @@ LightingScene.prototype.display = function() {
 	this.popMatrix();
 
 	//Targets
-
 	this.pushMatrix();
-		this.targetAppearance.apply();
-		this.translate(7,-3,6);
-		this.rotate(Math.PI/3,0,1,0);
-		this.scale(1,1,0.1);
-		this.target.display();
+		this.targets[0].display();
+		this.targets[1].display();
 	this.popMatrix();
-
-	this.pushMatrix();
-		this.targetAppearance.apply();
-		this.translate(-13,-3,-19);
-		this.rotate(Math.PI/5,0,1,0);
-		this.scale(1,1,0.1);
-		this.target.display();
-	this.popMatrix();
-
-	this.torpedo.display();
+	
+	
+	
 	//Sub
 
 	this.pushMatrix();
@@ -224,17 +211,22 @@ LightingScene.prototype.display = function() {
 		this.submarine.swim();
 		var time = Date.now();
 		this.submarine.turbinesRotation(time);
-		
+	
 		this.pushMatrix();
 			this.rotate(this.submarine.rotY * degToRad, 0,1,0);
-		//	this.submarine.display();
+		    this.submarine.display();
 		this.popMatrix();
-
+	
 		this.translate(0,0,5);
 		this.scale(3,.1,1);
 	this.popMatrix();
 	
-	
+	//Torpedo
+	this.pushMatrix();
+		this.torpedo.readyToFire();
+		this.translate(this.torpedo.x, this.torpedo.y, this.torpedo.z);
+		this.torpedo.display();
+	this.popMatrix();
 	
 	// ---- END Background, camera and axis setup
 	
@@ -246,26 +238,29 @@ LightingScene.prototype.display = function() {
 	
 	// ---- END Primitive drawing section
 };
-/*
-LightingScene.prototype.update = function(currentTime) {
-	var hourAngle = 30*(1+(currentTime/3600000)%(12));
-	var minAngle = 6*((currentTime/(60000))%(60));
-	var secAngle = 360*(((currentTime/1000)%60)/60);
-};
-*/
 
-LightingScene.prototype.doSomething = function ()
-{ console.log("Doing something..."); };
+
 
 LightingScene.prototype.update = function(currentTime) {
-	if(this.clock == true){
+	if(this.run){
 		var hourAngle = 30*(1+(currentTime/3600000)%(12));
 		var minAngle = 6*((currentTime/(60000))%(60));
 		var secAngle = 360*(((currentTime/1000)%60)/60);
 		MyClock(this,hourAngle, minAngle, secAngle);
 	}
 	
+	this.torpedo.update(currentTime);
+	
 };
+
+LightingScene.prototype.clock = function() {
+	this.run = !this.run;
+};
+
+
+
+
+
 
 
 
