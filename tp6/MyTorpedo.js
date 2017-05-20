@@ -3,7 +3,7 @@
  * @constructor
  */
 
- function MyTorpedo(scene, x, y, z, angle) {
+ function MyTorpedo(scene, x, y, z, hAngle, vAngle) {
  	this.cylinder = new MyCylinder(scene, 20,20);
 	this.sphere = new MySphere(scene,20,20);
  	CGFobject.call(this,scene);
@@ -20,10 +20,11 @@
 	this.y = y;
 	this.z = z;
 
-	this.angle1 = angle;
-	this.angle2 = 0;
+	//this.angle1 = angle;
+	//this.angle2 = 0;
 	this.orientation = 0;
-	this.hRot;
+	this.hRot = hAngle;
+	this.vRot = vAngle;
 
 	this.P2;
 	this.P3;	
@@ -38,6 +39,9 @@
 
 	this.firingTime;
 
+	this.y_offset = -1.6;
+	this.z_offset = 1.5;
+
 };
 
  MyTorpedo.prototype = Object.create(CGFobject.prototype);
@@ -49,6 +53,9 @@
  	// Body
  	//this.scene.rotate(this.currVertRot * degToRad,1,0,0);
  	this.scene.translate(0,0,-2);
+ 	this.scene.translate(this.x, this.y, this.z);
+	this.scene.rotate(this.hRot,0,1,0);
+	this.scene.rotate(-this.vRot, 1, 0, 0);
 
 
  	this.scene.pushMatrix();
@@ -110,13 +117,11 @@
  };
 	
  
- MyTorpedo.prototype.updatePosition = function(posX, posY, posZ){
+ MyTorpedo.prototype.updatePosition = function(x, y, z){
 
-    if (this.scene.submarine.speed != 0){
-        this.x = y;
-        this.y = y - 0.8;
-        this.z = z;
-    }
+        this.x = this.scene.submarine.x;
+        this.y = this.scene.submarine.y - 0.8;
+        this.z = this.scene.submarine.z;
  };
 
 
@@ -141,7 +146,6 @@
 
  };
 
-
  MyTorpedo.prototype.getTargetDistance = function(){
  	var vector = this.getVector();
 
@@ -151,13 +155,32 @@
  MyTorpedo.prototype.getRotationAngle = function(){
 
  	var vector = this.getVector();
- 	var distance = this.getTargetDistance();
- 	var angle = Math.acos(vector[2]/distance);
-
+ 	var normals = Math.sqrt(vector[0]*vector[0]+vector[2]*vector[2])
+ 	var angle = Math.acos(vector[2]/normals);
+	
  	if(vector[0] >= 0)
  		return angle;
  	else
  		return 2*Math.PI-angle;
+ };
+
+ MyTorpedo.prototype.getDirection = function(){
+	
+	var hVect = [Math.sin(this.hRot), 0, Math.cos(this.hRot)];
+	var vVect = [0, Math.sin(-this.vRot), Math.cos(this.vRot)];
+
+	var total = [hVect[0]+vVect[0], hVect[1]+vVect[1], hVect[2]+vVect[2]];
+
+	var angle = Math.PI/2+this.vRot;
+
+	var direction = [
+		Math.sin(angle) * Math.sin(this.hRot),
+		Math.cos(angle),
+		Math.sin(angle) * Math.cos(this.hRot),
+	];
+
+	return direction;
+
  };
 
  MyTorpedo.prototype.readyToFire = function(){
@@ -175,14 +198,20 @@
  	var vector = this.getVector();
  	var distance = this.getTargetDistance();
  	this.firingTime = distance;
-
+ 	//var direction = this.getDirection();
+	
+	/*
  	this.P2 = [
 		this.x + 2*Math.sin(this.scene.submarine.rotY),
 		this.y,
  		this.z + 2*Math.cos(this.scene.submarine.rotY),
  	]
-
-	
+	*/
+	this.P2 = [
+	this.x + 6*Math.sin(this.scene.submarine.rotY)/(Math.sqrt(1 + Math.pow(Math.sin(this.scene.submarine.rotY),2))), 
+	this.y + 6*Math.sin(this.scene.submarine.currVertRot)/(Math.sqrt(1 + Math.pow(Math.sin(this.scene.submarine.currVertRot),2))), 
+	this.z + 6*Math.cos(this.scene.submarine.rotY)/(Math.sqrt(1 + Math.pow(Math.sin(this.scene.submarine.currVertRot),2))), 
+	]
 
 	
  	this.P3 = [
@@ -214,25 +243,40 @@
  	}
 	*/
  
+	var totalRotation = this.getRotationAngle();
 
  	if(this.launch){
 		if(this.t <= 1.0){
+			
+			//this.orientation = (Math.PI/2-this.vRot)/(this.getTargetDistance*100);
 
 			var t = this.t;
 
-			this.x = Math.pow((1-t), 3)*this.x + 3*t*Math.pow(1-t,2)*this.P2[0] + 3*Math.pow(t,2)*(1-t)*this.P3[0] + Math.pow(t,3)*this.P4[0];
+			var x1 = Math.pow((1-t), 3)*this.x + 3*t*Math.pow(1-t,2)*this.P2[0] + 3*Math.pow(t,2)*(1-t)*this.P3[0] + Math.pow(t,3)*this.P4[0];
 			
-			this.y = Math.pow((1-t), 3)*this.y + 3*t*Math.pow(1-t,2)*this.P2[1] + 3*Math.pow(t,2)*(1-t)*this.P3[1] + Math.pow(t,3)*this.P4[1];
+			var y1 = Math.pow((1-t), 3)*this.y + 3*t*Math.pow(1-t,2)*this.P2[1] + 3*Math.pow(t,2)*(1-t)*this.P3[1] + Math.pow(t,3)*this.P4[1];
 			
-			this.z = Math.pow((1-t), 3)*this.z + 3*t*Math.pow(1-t,2)*this.P2[2] + 3*Math.pow(t,2)*(1-t)*this.P3[2] + Math.pow(t,3)*this.P4[2];                             
+			var z1 = Math.pow((1-t), 3)*this.z + 3*t*Math.pow(1-t,2)*this.P2[2] + 3*Math.pow(t,2)*(1-t)*this.P3[2] + Math.pow(t,3)*this.P4[2];                             
 			
-			//this.hRot = Math.atan(this.z/this.x);
-		
+			//this.hRot += totalRotation/11;
+			var dx = x1-this.x;
+			var dy = y1-this.y;
+			var dz = z1-this.z;
+
+			this.x = x1;
+			this.y = y1;
+			this.z = z1;
+
+			this.hRot = Math.atan(dx / dz) + (dz < 0 ? 180.0*degToRad : 0);
+			this.vRot = Math.atan(dy / Math.sqrt(dx*dx + dy*dy + dz*dz));
 
 
 			this.t += 1.0/(this.getTargetDistance() * 100);
 
-			//console.log(this.hRot);
+			this.y_offset = (1 - this.t) * -1.6;
+			if(this.y_offset > 0) this.y_offset = 0;
+			this.z_offset = (1 - this.t) * 1.5;
+			if(this.z_offset < 0) this.z_offset = 0;
 		
 		}
 

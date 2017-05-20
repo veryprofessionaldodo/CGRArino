@@ -23,6 +23,7 @@ LightingScene.prototype.init = function(application) {
 	CGFscene.prototype.init.call(this, application);
 	this.initCameras();
 	this.light0=true; this.light1=true; this.run = true; this.speed=3;
+	this.launch = false;
 
 	this.initLights();
 	this.enableTextures(true);
@@ -47,7 +48,7 @@ LightingScene.prototype.init = function(application) {
 	this.target1 = new MyTarget(this, 5, -1, 10);
 	this.target2 = new MyTarget(this, -6, -3, 13);
 	this.targets = [this.target2, this.target1];
-	this.torpedo = new MyTorpedo(this, this.submarine.posX, this.submarine.posY-.8, this.submarine.posZ+2.2, Math.PI);
+	this.torpedo = new MyTorpedo(this, this.submarine.posX, this.submarine.posY-.8, this.submarine.posZ, this.submarine.rotY, this.submarine.currVertRot);
 
 
 	this.hand2Appearance = new CGFappearance(this);
@@ -223,13 +224,14 @@ LightingScene.prototype.display = function() {
 		this.scale(3,.1,1);
 	this.popMatrix();
 	
-	//Torpedo
+	
 
-	this.torpedo.readyToFire();
-	//this.pushMatrix();
-			this.translate(this.torpedo.x, this.torpedo.y, this.torpedo.z);
-			this.rotate(this.torpedo.getRotationAngle(),0,1,0);
+	//Torpedo
+	if(this.launch){
+		this.torpedo.readyToFire();
 		this.torpedo.display();
+	}
+	
 	//this.popMatrix();
 	
 	// ---- END Background, camera and axis setup
@@ -252,7 +254,7 @@ LightingScene.prototype.update = function(currentTime) {
 		var secAngle = 360*(((currentTime/1000)%60)/60);
 		MyClock(this,hourAngle, minAngle, secAngle);
 	}
-	
+	//this.torpedo.updatePosition(this.submarine.x, this.submarine.y, this.submarine.z);
 	this.torpedo.update(currentTime);
 	
 };
