@@ -23,6 +23,7 @@
 	this.angle1 = angle;
 	this.angle2 = 0;
 	this.orientation = 0;
+	this.hRot;
 
 	this.P2;
 	this.P3;	
@@ -146,7 +147,7 @@
 
  	return Math.sqrt(Math.pow(vector[0],2)+ Math.pow(vector[1],2) + Math.pow(vector[2],2));
  };
-/*
+
  MyTorpedo.prototype.getRotationAngle = function(){
 
  	var vector = this.getVector();
@@ -158,7 +159,7 @@
  	else
  		return 2*Math.PI-angle;
  };
-*/
+
  MyTorpedo.prototype.readyToFire = function(){
  	
  	if(this.scene.targets.length == 0){
@@ -169,28 +170,24 @@
  	this.launch = true;
  	this.timePassed = 0;
 
-
+	
+	
  	var vector = this.getVector();
  	var distance = this.getTargetDistance();
  	this.firingTime = distance;
- 	//console.log("firing time:" + this.firingTime);
 
  	this.P2 = [
-		/*4/5 * vector[0] + */this.x,
-		/*vector[1]*/ this.y,
-		//4/5 * vector[2] + this.z,
- 		this.z+1,
+		this.x + 2*Math.sin(this.scene.submarine.rotY),
+		this.y,
+ 		this.z + 2*Math.cos(this.scene.submarine.rotY),
  	]
 
-	var p3y;
+	
 
-	if (this.scene.targets[0].y > this.scene.submarine.posY)
-		p3y = -1;
-	else 
-		p3y = 1;
+	
  	this.P3 = [
 		this.scene.targets[0].x,
-		this.scene.targets[0].y + p3y,
+		this.scene.targets[0].y + 3,
 		this.scene.targets[0].z,
  	]
 
@@ -228,12 +225,14 @@
 			this.y = Math.pow((1-t), 3)*this.y + 3*t*Math.pow(1-t,2)*this.P2[1] + 3*Math.pow(t,2)*(1-t)*this.P3[1] + Math.pow(t,3)*this.P4[1];
 			
 			this.z = Math.pow((1-t), 3)*this.z + 3*t*Math.pow(1-t,2)*this.P2[2] + 3*Math.pow(t,2)*(1-t)*this.P3[2] + Math.pow(t,3)*this.P4[2];                             
+			
+			//this.hRot = Math.atan(this.z/this.x);
 		
-			this.t += 1.0/(this.firingTime * 100);
 
-			console.log(this.firingTime);
 
-			//console.log(this.t + "," + this.x + "," + this.y + "," + this.z);
+			this.t += 1.0/(this.getTargetDistance() * 100);
+
+			//console.log(this.hRot);
 		
 		}
 

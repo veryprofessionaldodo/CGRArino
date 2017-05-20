@@ -45,7 +45,7 @@ LightingScene.prototype.init = function(application) {
 	this.target = new MyTarget(this);
 	this.torpedo = new MyTorpedo(this);
 	this.target1 = new MyTarget(this, 5, -1, 10);
-	this.target2 = new MyTarget(this, -6, -5, 13);
+	this.target2 = new MyTarget(this, -6, -3, 13);
 	this.targets = [this.target2, this.target1];
 	this.torpedo = new MyTorpedo(this, this.submarine.posX, this.submarine.posY-.8, this.submarine.posZ+2.2, Math.PI);
 
@@ -86,7 +86,7 @@ LightingScene.prototype.init = function(application) {
 	this.oceanAppearance.loadTexture("../resources/images/ocean.jpg");
 	this.oceanAppearance.setTextureWrap("MIRRORED_REPEAT", "MIRORRED_REPEAT");
 	
-	this.setUpdatePeriod(100);
+	this.setUpdatePeriod(1);
 	
 	this.currSubmarineAppearance = 0;
 	this.submarineAppearanceList = {'steel': 0, 'artsy': 1, 'cage': 2, 'poolball': 3};
@@ -226,10 +226,11 @@ LightingScene.prototype.display = function() {
 	//Torpedo
 
 	this.torpedo.readyToFire();
-	this.pushMatrix();
-		this.translate(this.torpedo.x, this.torpedo.y, this.torpedo.z);
+	//this.pushMatrix();
+			this.translate(this.torpedo.x, this.torpedo.y, this.torpedo.z);
+			this.rotate(this.torpedo.getRotationAngle(),0,1,0);
 		this.torpedo.display();
-	this.popMatrix();
+	//this.popMatrix();
 	
 	// ---- END Background, camera and axis setup
 	
