@@ -125,10 +125,12 @@
 	
  
  MyTorpedo.prototype.updatePosition = function(x, y, z){
-
+/*
         this.x = this.scene.submarine.x;
         this.y = this.scene.submarine.y - 0.8;
         this.z = this.scene.submarine.z;
+        */
+       
  };
 
 
@@ -156,7 +158,7 @@
  MyTorpedo.prototype.getTargetDistance = function(){
  	var vector = this.getVector();
  	var x =Math.sqrt(Math.pow(vector[0],2)+ Math.pow(vector[1],2) + Math.pow(vector[2],2)) 
- 	if (x < 0.25 && !this.hasExploded) {
+ 	if (x < 0.3 && !this.hasExploded) {
  		this.hasExploded = true;
  		this.scene.explode(this.scene.targets[0].x,
  		  this.scene.targets[0].y, this.scene.targets[0].z);
@@ -215,9 +217,9 @@
 	
 	console.log( Math.sin(-this.initialVRot * degToRad));
 	this.P2 = [
-		this.x + Math.cos(this.initialHRot * degToRad) * Math.cos(this.initialVRot * degToRad),
+		this.x + Math.sin(this.initialHRot * degToRad) * Math.cos(this.initialVRot * degToRad),
 		this.y + Math.sin(-this.initialVRot * degToRad),
- 		this.z + Math.sin(this.initialHRot * degToRad)* Math.cos(this.initialVRot * degToRad),
+ 		this.z + Math.cos(this.initialHRot * degToRad)* Math.cos(this.initialVRot * degToRad),
  	]
 
 	console.log("WOW")
