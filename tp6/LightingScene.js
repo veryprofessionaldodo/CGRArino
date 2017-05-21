@@ -1,3 +1,4 @@
+@@ -0,0 +1,364 @@
 var degToRad = Math.PI / 180.0;
 
 var BOARD_WIDTH = 6.0;
@@ -25,6 +26,7 @@ LightingScene.prototype.init = function(application) {
 	this.light0=true; this.light1=true; this.run = true; this.speed=3;
 	this.launch = false;
 	this.hit = false;
+	this.end = false;
 
 	this.initLights();
 	this.enableTextures(true);
@@ -53,6 +55,7 @@ LightingScene.prototype.init = function(application) {
 	this.targetY = this.targets[0].y;
 	this.targetZ = this.targets[0].z;
 	this.activeTarget = 0;
+	this.infoBoard = new MyQuad(this);
 	// Explosion
 
 	this.explosionAppearance = new CGFappearance(this);
@@ -100,6 +103,15 @@ LightingScene.prototype.init = function(application) {
 	this.oceanAppearance.loadTexture("../resources/images/ocean.jpg");
 	this.oceanAppearance.setTextureWrap("MIRRORED_REPEAT", "MIRORRED_REPEAT");
 	
+	this.infoAppearance = new CGFappearance(this);
+	this.infoAppearance.setAmbient(0.3,0.3,0.3,1);
+	this.infoAppearance.setDiffuse(0.6,0.6,0.6,1);
+	this.infoAppearance.setSpecular(0.8,0.8,0.8,1);	
+	this.infoAppearance.setShininess(120);
+	this.infoAppearance.loadTexture("../resources/images/info.png");
+	this.infoAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
+
+
 	this.setUpdatePeriod(1);
 	
 	this.currSubmarineAppearance = 0;
@@ -219,9 +231,7 @@ LightingScene.prototype.display = function() {
 	}
 
 	
-	//this.torpedo2 = new MyTorpedo(this,0,0,0,0,0);
-	//this.torpedo2.display();
-	
+
 	//Sub
 
 	this.pushMatrix();
@@ -243,10 +253,13 @@ LightingScene.prototype.display = function() {
 	
 
 	//Torpedo
+	
 	if(this.launch){
 		this.torpedos[0].readyToFire();
 		this.torpedos[0].display();
 	}
+	
+		
 
 
 	//Explosion
@@ -256,6 +269,19 @@ LightingScene.prototype.display = function() {
 			this.explosion.display();
 		this.popMatrix();
 	}
+
+	//Info Board
+	if(this.end){
+		 this.pushMatrix();
+	  		this.infoAppearance.apply();
+	  		this.rotate(Math.PI,0,1,0);
+	  		this.translate(0,0,-8);
+	  		this.scale(4,3,4);
+	  		this.infoBoard.display();
+	  	this.popMatrix();
+	}
+
+
 	
 
 	//this.torpedo = new MyTorpedo(this, 0,0,0,0,0);
@@ -297,10 +323,16 @@ LightingScene.prototype.clock = function() {
 };
 
 LightingScene.prototype.fire = function() {
+	if(this.targets.length != 0){
 	this.launch = !this.launch;
 	this.torpedos[0] = new MyTorpedo(this, this.submarine.posX, 
-	 this.submarine.posY, this.submarine.posZ, 
+	 this.submarine.posY-.8, this.submarine.posZ, 
 	  this.submarine.rotY, this.submarine.currVertRot);
+	  }
+	  else{
+		this.end = true;
+	  }
+	  	
 
 };
 
@@ -325,7 +357,6 @@ LightingScene.prototype.explode = function(x,y,z) {
 	this.exploded = true;
 
 }
-
 
 
 

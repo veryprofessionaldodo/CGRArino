@@ -215,10 +215,13 @@
 	
 	console.log( Math.sin(-this.initialVRot * degToRad));
 	this.P2 = [
-		this.x + Math.sin(this.initialHRot * degToRad),
+		this.x + Math.cos(this.initialHRot * degToRad) * Math.cos(this.initialVRot * degToRad),
 		this.y + Math.sin(-this.initialVRot * degToRad),
- 		this.z + Math.cos(this.initialHRot * degToRad),
+ 		this.z + Math.sin(this.initialHRot * degToRad)* Math.cos(this.initialVRot * degToRad),
  	]
+
+	console.log("WOW")
+ 	console.log(this.P2[0]+ " " + this.P2[1] + " " + this.P2[2])
 	
 	/*this.P2 = [
 	this.x + Math.sin(this.initialHRot * degToRad)/
