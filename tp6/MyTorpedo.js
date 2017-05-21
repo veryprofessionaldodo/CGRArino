@@ -28,7 +28,7 @@
 	this.initialVRot = vAngle;
 	
 
-	var tmp2 = Math.cos(this.initialHRot * degToRad)* Math.cos(this.initialVRot * degToRad);
+	var tmp2 = Math.sin(this.initialHRot * degToRad)* Math.sin(this.initialVRot * degToRad);
 	this.x = x -  tmp2;
 
 	//CERTO
