@@ -52,6 +52,7 @@ LightingScene.prototype.init = function(application) {
 	this.targetX = this.targets[0].x;
 	this.targetY = this.targets[0].y;
 	this.targetZ = this.targets[0].z;
+	this.activeTarget = 0;
 	// Explosion
 
 	this.explosionAppearance = new CGFappearance(this);
@@ -309,7 +310,8 @@ LightingScene.prototype.removeTarget = function(){
 		this.targets.shift();
 		this.torpedos.pop();
 		this.torpedos.push(new MyTorpedo(this));
-
+		
+	
 		this.hit = false;
 	}
 

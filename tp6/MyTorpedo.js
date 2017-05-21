@@ -157,11 +157,10 @@
  	var x =Math.sqrt(Math.pow(vector[0],2)+ Math.pow(vector[1],2) + Math.pow(vector[2],2)) 
  	if (x < 0.15 && !this.hasExploded) {
  		this.hasExploded = true;
- 		this.scene.explode(this.scene.targetX,
- 		  this.scene.targetY, this.scene.targetZ);
+ 		this.scene.explode(this.scene.targets[0].x,
+ 		  this.scene.targets[0].y, this.scene.targets[0].z);
 		this.scene.isExpanding = true;
-		if (this.scene.currExplosionScale >= 1) {}
-			// TODO remove from vector
+		
  	}
  	return x;
  };
