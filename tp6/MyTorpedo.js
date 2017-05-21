@@ -302,8 +302,6 @@
 		
  	}
 
- 	
- 	console.log(this.scene.hit);
  	this.timePassed = currTime;
  };
 
