@@ -219,8 +219,8 @@ LightingScene.prototype.display = function() {
 	}
 
 	
-	this.torpedo2 = new MyTorpedo(this,0,0,0,0,0);
-	this.torpedo2.display();
+	//this.torpedo2 = new MyTorpedo(this,0,0,0,0,0);
+	//this.torpedo2.display();
 	
 	//Sub
 
@@ -299,7 +299,7 @@ LightingScene.prototype.clock = function() {
 LightingScene.prototype.fire = function() {
 	this.launch = !this.launch;
 	this.torpedos[0] = new MyTorpedo(this, this.submarine.posX, 
-	 this.submarine.posY-.8, this.submarine.posZ, 
+	 this.submarine.posY, this.submarine.posZ, 
 	  this.submarine.rotY, this.submarine.currVertRot);
 
 };

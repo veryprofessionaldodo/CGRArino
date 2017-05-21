@@ -19,7 +19,7 @@
 	this.hasExploded = false;
 	this.x = x;
 	this.y = y;
-	this.z = z -1.5 ;
+	this.z = z;
 
 	//this.angle1 = angle;
 	//this.angle2 = 0;
@@ -55,11 +55,12 @@
  MyTorpedo.prototype.constructor = MyTorpedo;
 
  MyTorpedo.prototype.display = function() {
+ 	this.scene.pushMatrix();
  	this.steelAppearance.apply();
  	// Body
  	//this.scene.rotate(this.currVertRot * degToRad,1,0,0);
- 	//this.scene.translate(0,0,-2);
- 	this.scene.translate(this.x, this.y, this.z+0.5);
+ 	this.scene.translate(0,0,-1);
+ 	this.scene.translate(this.x, this.y, this.z);
 	this.scene.rotate(this.hRot,0,1,0);
 	this.scene.rotate(-this.vRot, 1, 0, 0);
 
@@ -118,7 +119,7 @@
 		this.scene.popMatrix();
 	this.scene.popMatrix();
 
-	
+	this.scene.popMatrix();
 
  };
 	
@@ -155,9 +156,7 @@
  MyTorpedo.prototype.getTargetDistance = function(){
  	var vector = this.getVector();
  	var x =Math.sqrt(Math.pow(vector[0],2)+ Math.pow(vector[1],2) + Math.pow(vector[2],2)) 
- 	console.log(x + " " + this.hasExploded);
  	if (x < 0.25 && !this.hasExploded) {
- 		console.log("PIÇAS");
  		this.hasExploded = true;
  		this.scene.explode(this.scene.targets[0].x,
  		  this.scene.targets[0].y, this.scene.targets[0].z);
@@ -214,20 +213,21 @@
  	this.firingTime = distance;
  	//var direction = this.getDirection();
 	
-	/*this.P2 = [
-		this.x + 2*Math.sin(this.initialHRot * degToRad),
-		this.y,
- 		this.z + 2*Math.cos(this.initialHRot * degToRad),
- 	]*/
-	
+	console.log( Math.sin(-this.initialVRot * degToRad));
 	this.P2 = [
+		this.x + Math.sin(this.initialHRot * degToRad),
+		this.y + Math.sin(-this.initialVRot * degToRad),
+ 		this.z + Math.cos(this.initialHRot * degToRad),
+ 	]
+	
+	/*this.P2 = [
 	this.x + Math.sin(this.initialHRot * degToRad)/
 	  (Math.sqrt(1 + Math.pow(Math.sin(this.initialHRot * degToRad),2))), 
 	this.y + Math.sin(this.initialVRot * degToRad)/
 	  (Math.sqrt(1 + Math.pow(Math.sin(this.initialVRot * degToRad),2))), 
 	this.z + Math.cos(this.initialHRot * degToRad)/
 	   (Math.sqrt(1 + Math.pow(Math.sin(this.initialHRot* degToRad),2))), 
-	]
+	]*/
 
 	
  	this.P3 = [
