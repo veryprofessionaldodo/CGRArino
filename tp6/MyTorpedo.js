@@ -17,9 +17,6 @@
 	this.steelAppearance.loadTexture("../resources/images/steel.jpg");
 	
 	this.hasExploded = false;
-	this.x = x;
-	this.y = y;
-	this.z = z;
 
 	//this.angle1 = angle;
 	//this.angle2 = 0;
@@ -29,6 +26,21 @@
 
 	this.initialHRot = hAngle;
 	this.initialVRot = vAngle;
+	
+
+	var tmp2 = Math.cos(this.initialHRot * degToRad)* Math.cos(this.initialVRot * degToRad);
+	this.x = x -  tmp2;
+
+	//CERTO
+	var tmp3 =Math.sin(-this.initialVRot * degToRad);
+	this.y = y- 0.9*Math.cos(-this.initialVRot * degToRad) - tmp3;
+
+	//CERTO
+	var tmp = Math.cos(this.initialHRot * degToRad)* Math.cos(this.initialVRot * degToRad);
+	this.z = z - 1*Math.cos(this.initialHRot * degToRad)* Math.sin(this.initialVRot * degToRad) - tmp;
+
+	console.log(this.x + " " + this.y + " " +this.z);
+	console.log(x + " " + y + " " + z);
 
 	//this.P2;
 	//this.P3;	
@@ -59,7 +71,7 @@
  	this.steelAppearance.apply();
  	// Body
  	//this.scene.rotate(this.currVertRot * degToRad,1,0,0);
- 	this.scene.translate(0,0,-1);
+ //	this.scene.translate(0,0,1);
  	this.scene.translate(this.x, this.y, this.z);
 	this.scene.rotate(this.hRot,0,1,0);
 	this.scene.rotate(-this.vRot, 1, 0, 0);
@@ -158,7 +170,7 @@
  MyTorpedo.prototype.getTargetDistance = function(){
  	var vector = this.getVector();
  	var x =Math.sqrt(Math.pow(vector[0],2)+ Math.pow(vector[1],2) + Math.pow(vector[2],2)) 
- 	if (x < 0.3 && !this.hasExploded) {
+ 	if (x < 1 && !this.hasExploded) {
  		this.hasExploded = true;
  		this.scene.explode(this.scene.targets[0].x,
  		  this.scene.targets[0].y, this.scene.targets[0].z);
@@ -215,15 +227,12 @@
  	this.firingTime = distance;
  	//var direction = this.getDirection();
 	
-	console.log( Math.sin(-this.initialVRot * degToRad));
 	this.P2 = [
 		this.x + Math.sin(this.initialHRot * degToRad) * Math.cos(this.initialVRot * degToRad),
 		this.y + Math.sin(-this.initialVRot * degToRad),
  		this.z + Math.cos(this.initialHRot * degToRad)* Math.cos(this.initialVRot * degToRad),
  	]
 
-	console.log("WOW")
- 	console.log(this.P2[0]+ " " + this.P2[1] + " " + this.P2[2])
 	
 	/*this.P2 = [
 	this.x + Math.sin(this.initialHRot * degToRad)/
@@ -237,7 +246,7 @@
 	
  	this.P3 = [
 		this.scene.targets[0].x,
-		this.scene.targets[0].y +3,
+		this.scene.targets[0].y +0.5,
 		this.scene.targets[0].z,
  	]
 

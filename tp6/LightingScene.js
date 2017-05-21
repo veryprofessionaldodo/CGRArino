@@ -249,7 +249,8 @@ LightingScene.prototype.display = function() {
 		this.scale(3,.1,1);
 	this.popMatrix();
 	
-	
+	//this.torpedo2 = new MyTorpedo(this,0,0,0,0,0);
+	//this.torpedo2.display();
 
 	//Torpedo
 	
@@ -325,7 +326,7 @@ LightingScene.prototype.fire = function() {
 	if(this.targets.length != 0){
 	this.launch = !this.launch;
 	this.torpedos[0] = new MyTorpedo(this, this.submarine.posX, 
-	 this.submarine.posY-.8, this.submarine.posZ, 
+	 this.submarine.posY, this.submarine.posZ, 
 	  this.submarine.rotY, this.submarine.currVertRot);
 	  }
 	  else{
