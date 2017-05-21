@@ -45,11 +45,13 @@ LightingScene.prototype.init = function(application) {
 	this.oceanFloor = new MyQuad(this, -0.5,1.5,-1,1);
 	this.trapeze = new MyTrapeze(this);
 	this.target = new MyTarget(this);
-	this.torpedo = new MyTorpedo(this);
+	this.torpedos = [new MyTorpedo(this)];
 	this.target1 = new MyTarget(this, 5, -1, 10);
 	this.target2 = new MyTarget(this, -6, -3, 13);
 	this.targets = [this.target2, this.target1];
-	
+	this.targetX = this.targets[0].x;
+	this.targetY = this.targets[0].y;
+	this.targetZ = this.targets[0].z;
 	// Explosion
 
 	this.explosionAppearance = new CGFappearance(this);
@@ -95,7 +97,7 @@ LightingScene.prototype.init = function(application) {
 	this.oceanAppearance.setSpecular(0.8,0.8,0.8,1);	
 	this.oceanAppearance.setShininess(120);
 	this.oceanAppearance.loadTexture("../resources/images/ocean.jpg");
-	//this.oceanAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
+	this.oceanAppearance.setTextureWrap("MIRRORED_REPEAT", "MIRORRED_REPEAT");
 	
 	this.setUpdatePeriod(1);
 	
@@ -209,10 +211,12 @@ LightingScene.prototype.display = function() {
 	this.popMatrix();
 
 	//Targets
-	this.pushMatrix();
-		this.targets[0].display();
-		this.targets[1].display();
-	this.popMatrix();
+	for(var i=0; i<this.targets.length; i++){
+		this.pushMatrix();
+				this.targets[i].display();
+		this.popMatrix();
+	}
+
 	
 	
 	
@@ -234,15 +238,14 @@ LightingScene.prototype.display = function() {
 		this.scale(3,.1,1);
 	this.popMatrix();
 	
-	this.pushMatrix();
+	
 
 	//Torpedo
 	if(this.launch){
-		this.torpedo.readyToFire();
-		this.torpedo.display();
+		this.torpedos[0].readyToFire();
+		this.torpedos[0].display();
 	}
 
-	this.popMatrix();
 
 	//Explosion
 	if (this.exploded) {
@@ -251,6 +254,7 @@ LightingScene.prototype.display = function() {
 			this.explosion.display();
 		this.popMatrix();
 	}
+	
 
 	//this.torpedo = new MyTorpedo(this, 0,0,0,0,0);
 	//this.torpedo.display();
@@ -271,11 +275,7 @@ LightingScene.prototype.display = function() {
 
 
 LightingScene.prototype.update = function(currentTime) {
-	/*
-	if(!this.torpedo.launch){
-		this.removeTarget();
-	}
-	*/
+	this.removeTarget();
 	if(this.run){
 		var hourAngle = 30*(1+(currentTime/3600000)%(12));
 		var minAngle = 6*((currentTime/(60000))%(60));
@@ -283,7 +283,10 @@ LightingScene.prototype.update = function(currentTime) {
 		MyClock(this,hourAngle, minAngle, secAngle);
 	}
 	//this.torpedo.updatePosition(this.submarine.x, this.submarine.y, this.submarine.z);
-	this.torpedo.update(currentTime);
+	if(this.launch)
+		this.torpedos[0].update(currentTime);
+
+	//this.removeTarget();
 	
 };
 
@@ -293,7 +296,7 @@ LightingScene.prototype.clock = function() {
 
 LightingScene.prototype.fire = function() {
 	this.launch = !this.launch;
-	this.torpedo = new MyTorpedo(this, this.submarine.posX, 
+	this.torpedos[0] = new MyTorpedo(this, this.submarine.posX, 
 	 this.submarine.posY-.8, this.submarine.posZ, 
 	  this.submarine.rotY, this.submarine.currVertRot);
 
@@ -302,12 +305,14 @@ LightingScene.prototype.fire = function() {
 
 LightingScene.prototype.removeTarget = function(){
 	//remove first element
-
 	if (this.hit){
 		this.targets.shift();
-		
+		this.torpedos.pop();
+		this.torpedos.push(new MyTorpedo(this));
+
 		this.hit = false;
 	}
+
 }
 
 
