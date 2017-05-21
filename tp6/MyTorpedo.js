@@ -247,7 +247,7 @@
 	
  	this.P3 = [
 		this.scene.targets[0].x,
-		this.scene.targets[0].y +0.5,
+		this.scene.targets[0].y +1,
 		this.scene.targets[0].z,
  	]
 
