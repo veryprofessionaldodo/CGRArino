@@ -63,7 +63,7 @@
  	this.scene.translate(this.x, this.y, this.z);
 	this.scene.rotate(this.hRot,0,1,0);
 	this.scene.rotate(-this.vRot, 1, 0, 0);
-
+	this.scene.translate(0,0,-2);
 
  	this.scene.pushMatrix();
  		this.scene.scale(.2,.2,2);
@@ -303,14 +303,10 @@
 			this.scene.launch = false;
 		}
 		
-		
  	}
 
  	this.timePassed = currTime;
  };
-
-
-
 
 
 

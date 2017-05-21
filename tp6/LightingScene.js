@@ -1,4 +1,3 @@
-@@ -0,0 +1,364 @@
 var degToRad = Math.PI / 180.0;
 
 var BOARD_WIDTH = 6.0;
