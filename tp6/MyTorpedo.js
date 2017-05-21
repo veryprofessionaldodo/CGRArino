@@ -54,7 +54,7 @@
  	this.steelAppearance.apply();
  	// Body
  	//this.scene.rotate(this.currVertRot * degToRad,1,0,0);
- 	this.scene.translate(0,0,-2);
+ 	//this.scene.translate(0,0,-2);
  	this.scene.translate(this.x, this.y, this.z);
 	this.scene.rotate(this.hRot,0,1,0);
 	this.scene.rotate(-this.vRot, 1, 0, 0);
@@ -219,7 +219,7 @@
 	
  	this.P3 = [
 		this.scene.targets[0].x,
-		this.scene.targets[0].y +0.5,
+		this.scene.targets[0].y +3,
 		this.scene.targets[0].z,
  	]
 
@@ -284,8 +284,10 @@
 		}
 
 		this.launch = false;
+		
  	}
 
+ 	this.scene.hit = true;
  	this.timePassed = currTime;
  };
 

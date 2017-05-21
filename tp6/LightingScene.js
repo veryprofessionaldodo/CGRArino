@@ -24,6 +24,7 @@ LightingScene.prototype.init = function(application) {
 	this.initCameras();
 	this.light0=true; this.light1=true; this.run = true; this.speed=3;
 	this.launch = false;
+	this.hit = false;
 
 	this.initLights();
 	this.enableTextures(true);
@@ -251,6 +252,11 @@ LightingScene.prototype.display = function() {
 
 
 LightingScene.prototype.update = function(currentTime) {
+	/*
+	if(!this.torpedo.launch){
+		this.removeTarget();
+	}
+	*/
 	if(this.run){
 		var hourAngle = 30*(1+(currentTime/3600000)%(12));
 		var minAngle = 6*((currentTime/(60000))%(60));
@@ -273,6 +279,17 @@ LightingScene.prototype.fire = function() {
 	  this.submarine.rotY, this.submarine.currVertRot);
 
 };
+
+
+LightingScene.prototype.removeTarget = function(){
+	//remove first element
+
+	if (this.hit){
+		this.targets.shift();
+		
+		this.hit = false;
+	}
+}
 
 
 
