@@ -50,6 +50,15 @@ LightingScene.prototype.init = function(application) {
 	this.target2 = new MyTarget(this, -6, -3, 13);
 	this.targets = [this.target2, this.target1];
 	
+	// Explosion
+
+	this.explosionAppearance = new CGFappearance(this);
+	this.explosionAppearance.setAmbient(0.3,0.3,0.3,1);
+	this.explosionAppearance.setDiffuse(0.6,0.6,0.6,1);
+	this.explosionAppearance.setSpecular(0.8,0.8,0.8,1);	
+	this.explosionAppearance.setShininess(120);
+	this.explosionAppearance.loadTexture("../resources/images/explosion_teste2.png");
+	this.explosionAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
 
 
 	this.hand2Appearance = new CGFappearance(this);
@@ -233,6 +242,15 @@ LightingScene.prototype.display = function() {
 		this.torpedo.display();
 	}
 
+
+	//Explosion
+	if (this.exploded) {
+		this.pushMatrix();
+			this.explosionAppearance.apply();
+			this.explosion.display();
+		this.popMatrix();
+	}
+
 	//this.torpedo = new MyTorpedo(this, 0,0,0,0,0);
 	//this.torpedo.display();
 	
@@ -293,6 +311,11 @@ LightingScene.prototype.removeTarget = function(){
 
 
 
+LightingScene.prototype.explode = function(x,y,z) {
+	this.explosion = new MyExplosion(this,x,y,z);
+	this.exploded = true;
+
+}
 
 
 

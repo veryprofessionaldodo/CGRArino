@@ -16,9 +16,10 @@
 	this.steelAppearance = new CGFappearance(this.scene);
 	this.steelAppearance.loadTexture("../resources/images/steel.jpg");
 	
+	this.hasExploded = false;
 	this.x = x;
 	this.y = y;
-	this.z = z + 1;
+	this.z = z ;
 
 	//this.angle1 = angle;
 	//this.angle2 = 0;
@@ -55,7 +56,7 @@
  	// Body
  	//this.scene.rotate(this.currVertRot * degToRad,1,0,0);
  	//this.scene.translate(0,0,-2);
- 	this.scene.translate(this.x, this.y, this.z);
+ 	this.scene.translate(this.x, this.y, this.z+0.5);
 	this.scene.rotate(this.hRot,0,1,0);
 	this.scene.rotate(-this.vRot, 1, 0, 0);
 
@@ -150,8 +151,19 @@
 
  MyTorpedo.prototype.getTargetDistance = function(){
  	var vector = this.getVector();
-
- 	return Math.sqrt(Math.pow(vector[0],2)+ Math.pow(vector[1],2) + Math.pow(vector[2],2));
+ 	var x =Math.sqrt(Math.pow(vector[0],2)+ Math.pow(vector[1],2) + Math.pow(vector[2],2)) 
+ 	if (x < 0.15 && !this.hasExploded) {
+ 		this.hasExploded = true;
+ 		this.scene.explode(this.scene.targets[0].x,
+ 		  this.scene.targets[0].y, this.scene.targets[0].z);
+		this.scene.posXExplosion = this.scene.targets[0].x;
+		this.scene.posYExplosion = this.scene.targets[0].y;
+		this.scene.posZExplosion = this.scene.targets[0].z;
+		this.scene.isExpanding = true;
+		if (this.scene.currExplosionScale >= 1) {}
+			// TODO remove from vector
+ 	}
+ 	return x;
  };
 
  MyTorpedo.prototype.getRotationAngle = function(){

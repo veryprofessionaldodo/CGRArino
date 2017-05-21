@@ -8,7 +8,7 @@ serialInclude([
 	'MyPrism.js',
 	'MyCylinder.js',
 	'MyInsideCylinder.js',
-
+	'MyExplosion.js',
 	'Plane.js',
 	'MyTable.js',
 	'MyUnitCubeQuad.js',
