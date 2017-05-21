@@ -88,7 +88,7 @@ MyInterface.prototype.processKeyDown = function(event) {
 		this.scene.submarine.isChangingHeight = -this.scene.speed;
 	if (event.keyCode == 70){
 		//console.log("trabalha crl");
-		this.scene.launch = true;
+		this.scene.fire();
 	}
 
 	

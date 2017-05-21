@@ -48,7 +48,7 @@ LightingScene.prototype.init = function(application) {
 	this.target1 = new MyTarget(this, 5, -1, 10);
 	this.target2 = new MyTarget(this, -6, -3, 13);
 	this.targets = [this.target2, this.target1];
-	this.torpedo = new MyTorpedo(this, this.submarine.posX, this.submarine.posY-.8, this.submarine.posZ, this.submarine.rotY, this.submarine.currVertRot);
+	
 
 
 	this.hand2Appearance = new CGFappearance(this);
@@ -263,6 +263,13 @@ LightingScene.prototype.clock = function() {
 	this.run = !this.run;
 };
 
+LightingScene.prototype.fire = function() {
+	this.launch = !this.launch;
+	this.torpedo = new MyTorpedo(this, this.submarine.posX, 
+	 this.submarine.posY-.8, this.submarine.posZ, 
+	  this.submarine.rotY, this.submarine.currVertRot);
+
+};
 
 
 
