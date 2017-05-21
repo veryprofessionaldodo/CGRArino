@@ -19,7 +19,7 @@
 	this.hasExploded = false;
 	this.x = x;
 	this.y = y;
-	this.z = z ;
+	this.z = z -1.5 ;
 
 	//this.angle1 = angle;
 	//this.angle2 = 0;
@@ -155,7 +155,9 @@
  MyTorpedo.prototype.getTargetDistance = function(){
  	var vector = this.getVector();
  	var x =Math.sqrt(Math.pow(vector[0],2)+ Math.pow(vector[1],2) + Math.pow(vector[2],2)) 
- 	if (x < 0.15 && !this.hasExploded) {
+ 	console.log(x + " " + this.hasExploded);
+ 	if (x < 0.25 && !this.hasExploded) {
+ 		console.log("PIÇAS");
  		this.hasExploded = true;
  		this.scene.explode(this.scene.targets[0].x,
  		  this.scene.targets[0].y, this.scene.targets[0].z);

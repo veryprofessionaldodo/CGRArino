@@ -219,7 +219,8 @@ LightingScene.prototype.display = function() {
 	}
 
 	
-	
+	this.torpedo2 = new MyTorpedo(this,0,0,0,0,0);
+	this.torpedo2.display();
 	
 	//Sub
 
