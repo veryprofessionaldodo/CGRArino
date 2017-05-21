@@ -152,13 +152,11 @@
  MyTorpedo.prototype.getTargetDistance = function(){
  	var vector = this.getVector();
  	var x =Math.sqrt(Math.pow(vector[0],2)+ Math.pow(vector[1],2) + Math.pow(vector[2],2)) 
- 	if (x < 0.15 && !this.hasExploded) {
+ 	if (x < 1.5 && !this.hasExploded) {
  		this.hasExploded = true;
+
  		this.scene.explode(this.scene.targets[0].x,
  		  this.scene.targets[0].y, this.scene.targets[0].z);
-		this.scene.posXExplosion = this.scene.targets[0].x;
-		this.scene.posYExplosion = this.scene.targets[0].y;
-		this.scene.posZExplosion = this.scene.targets[0].z;
 		this.scene.isExpanding = true;
 		if (this.scene.currExplosionScale >= 1) {}
 			// TODO remove from vector
@@ -220,21 +218,19 @@
  	]*/
 	
 	this.P2 = [
-	this.x + Math.sin(this.initialHRot * degToRad)/
+	this.x + 3* Math.sin(this.initialHRot * degToRad)/
 	  (Math.sqrt(1 + Math.pow(Math.sin(this.initialHRot * degToRad),2))), 
-	this.y + Math.sin(this.initialVRot * degToRad)/
+	this.y + 3*Math.sin(this.initialVRot * degToRad)/
 	  (Math.sqrt(1 + Math.pow(Math.sin(this.initialVRot * degToRad),2))), 
-	this.z + Math.cos(this.initialHRot * degToRad)/
+	this.z + 3*Math.cos(this.initialHRot * degToRad)/
 	   (Math.sqrt(1 + Math.pow(Math.sin(this.initialHRot* degToRad),2))), 
 	]
 
-	
  	this.P3 = [
 		this.scene.targets[0].x,
-		this.scene.targets[0].y +3,
+		this.scene.targets[0].y + 1,
 		this.scene.targets[0].z,
  	]
-
 
  };
 

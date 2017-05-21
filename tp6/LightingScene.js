@@ -95,7 +95,7 @@ LightingScene.prototype.init = function(application) {
 	this.oceanAppearance.setSpecular(0.8,0.8,0.8,1);	
 	this.oceanAppearance.setShininess(120);
 	this.oceanAppearance.loadTexture("../resources/images/ocean.jpg");
-	this.oceanAppearance.setTextureWrap("MIRRORED_REPEAT", "MIRORRED_REPEAT");
+	//this.oceanAppearance.setTextureWrap("CLAMP_TO_EDGE", "CLAMP_TO_EDGE");
 	
 	this.setUpdatePeriod(1);
 	
@@ -234,7 +234,7 @@ LightingScene.prototype.display = function() {
 		this.scale(3,.1,1);
 	this.popMatrix();
 	
-	
+	this.pushMatrix();
 
 	//Torpedo
 	if(this.launch){
@@ -242,6 +242,7 @@ LightingScene.prototype.display = function() {
 		this.torpedo.display();
 	}
 
+	this.popMatrix();
 
 	//Explosion
 	if (this.exploded) {

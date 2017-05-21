@@ -22,7 +22,7 @@
 
  MyExplosion.prototype.display = function() {
  	//this.explosionSphere.display();
- 	//this.scene.translate(this.posX, this.posY, this.posZ);
+ 	this.scene.translate(this.posX, this.posY, this.posZ);
 	this.scene.scale(this.currExplosionScale, this.currExplosionScale, this.currExplosionScale);
 	this.explosionSphere.display();
 	this.scene.rotate(Math.PI,0,1,0);
