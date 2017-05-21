@@ -231,6 +231,9 @@ LightingScene.prototype.display = function() {
 		this.torpedo.readyToFire();
 		this.torpedo.display();
 	}
+
+	//this.torpedo = new MyTorpedo(this, 0,0,0,0,0);
+	//this.torpedo.display();
 	
 	//this.popMatrix();
 	

@@ -18,7 +18,7 @@
 	
 	this.x = x;
 	this.y = y;
-	this.z = z;
+	this.z = z + 1;
 
 	//this.angle1 = angle;
 	//this.angle2 = 0;
@@ -208,9 +208,12 @@
  	]
 	*/
 	this.P2 = [
-	this.x + Math.sin(this.scene.submarine.rotY)/(Math.sqrt(1 + Math.pow(Math.sin(this.scene.submarine.rotY),2))), 
-	this.y + Math.sin(this.scene.submarine.currVertRot)/(Math.sqrt(1 + Math.pow(Math.sin(this.scene.submarine.currVertRot),2))), 
-	this.z + Math.cos(this.scene.submarine.rotY)/(Math.sqrt(1 + Math.pow(Math.sin(this.scene.submarine.currVertRot),2))), 
+	this.x + Math.sin(this.scene.submarine.rotY)/
+	  (Math.sqrt(1 + Math.pow(Math.sin(this.scene.submarine.rotY),2))), 
+	this.y + Math.sin(this.scene.submarine.currVertRot)/
+	  (Math.sqrt(1 + Math.pow(Math.sin(this.scene.submarine.currVertRot),2))), 
+	this.z + Math.cos(this.scene.submarine.rotY)/
+	   (Math.sqrt(1 + Math.pow(Math.sin(this.scene.submarine.currVertRot),2))), 
 	]
 
 	

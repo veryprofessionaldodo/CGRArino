@@ -73,7 +73,7 @@ var currTime, isChangingHeight, vertRot, currVertRot;
  	//
  	*/
  	this.scene.rotate(this.rotY * degToRad,0,1,0);
-	console.log(this.rotY);
+	
  	this.scene.rotate(this.currVertRot * degToRad, 1, 0, 0);
 
  	this.scene.translate(0,0,-2);
