@@ -208,15 +208,15 @@
  	]
 	*/
 	this.P2 = [
-	this.x + 6*Math.sin(this.scene.submarine.rotY)/(Math.sqrt(1 + Math.pow(Math.sin(this.scene.submarine.rotY),2))), 
-	this.y + 6*Math.sin(this.scene.submarine.currVertRot)/(Math.sqrt(1 + Math.pow(Math.sin(this.scene.submarine.currVertRot),2))), 
-	this.z + 6*Math.cos(this.scene.submarine.rotY)/(Math.sqrt(1 + Math.pow(Math.sin(this.scene.submarine.currVertRot),2))), 
+	this.x + Math.sin(this.scene.submarine.rotY)/(Math.sqrt(1 + Math.pow(Math.sin(this.scene.submarine.rotY),2))), 
+	this.y + Math.sin(this.scene.submarine.currVertRot)/(Math.sqrt(1 + Math.pow(Math.sin(this.scene.submarine.currVertRot),2))), 
+	this.z + Math.cos(this.scene.submarine.rotY)/(Math.sqrt(1 + Math.pow(Math.sin(this.scene.submarine.currVertRot),2))), 
 	]
 
 	
  	this.P3 = [
 		this.scene.targets[0].x,
-		this.scene.targets[0].y + 3,
+		this.scene.targets[0].y +0.5,
 		this.scene.targets[0].z,
  	]
 
