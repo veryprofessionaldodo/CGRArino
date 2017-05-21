@@ -26,8 +26,11 @@
 	this.hRot = hAngle;
 	this.vRot = vAngle;
 
-	this.P2;
-	this.P3;	
+	this.initialHRot = hAngle;
+	this.initialVRot = vAngle;
+
+	//this.P2;
+	//this.P3;	
 	this.P4;
 	this.t = 0;
 	
@@ -48,8 +51,7 @@
  MyTorpedo.prototype.constructor = MyTorpedo;
 
  MyTorpedo.prototype.display = function() {
- 	
-	this.steelAppearance.apply();
+ 	this.steelAppearance.apply();
  	// Body
  	//this.scene.rotate(this.currVertRot * degToRad,1,0,0);
  	this.scene.translate(0,0,-2);
@@ -172,7 +174,6 @@
 	var total = [hVect[0]+vVect[0], hVect[1]+vVect[1], hVect[2]+vVect[2]];
 
 	var angle = Math.PI/2+this.vRot;
-
 	var direction = [
 		Math.sin(angle) * Math.sin(this.hRot),
 		Math.cos(angle),
@@ -200,20 +201,19 @@
  	this.firingTime = distance;
  	//var direction = this.getDirection();
 	
-	/*
- 	this.P2 = [
-		this.x + 2*Math.sin(this.scene.submarine.rotY),
+	/*this.P2 = [
+		this.x + 2*Math.sin(this.initialHRot * degToRad),
 		this.y,
- 		this.z + 2*Math.cos(this.scene.submarine.rotY),
- 	]
-	*/
+ 		this.z + 2*Math.cos(this.initialHRot * degToRad),
+ 	]*/
+	
 	this.P2 = [
-	this.x + Math.sin(this.scene.submarine.rotY)/
-	  (Math.sqrt(1 + Math.pow(Math.sin(this.scene.submarine.rotY),2))), 
-	this.y + Math.sin(this.scene.submarine.currVertRot)/
-	  (Math.sqrt(1 + Math.pow(Math.sin(this.scene.submarine.currVertRot),2))), 
-	this.z + Math.cos(this.scene.submarine.rotY)/
-	   (Math.sqrt(1 + Math.pow(Math.sin(this.scene.submarine.currVertRot),2))), 
+	this.x + Math.sin(this.initialHRot * degToRad)/
+	  (Math.sqrt(1 + Math.pow(Math.sin(this.initialHRot * degToRad),2))), 
+	this.y + Math.sin(this.initialVRot * degToRad)/
+	  (Math.sqrt(1 + Math.pow(Math.sin(this.initialVRot * degToRad),2))), 
+	this.z + Math.cos(this.initialHRot * degToRad)/
+	   (Math.sqrt(1 + Math.pow(Math.sin(this.initialHRot* degToRad),2))), 
 	]
 
 	
