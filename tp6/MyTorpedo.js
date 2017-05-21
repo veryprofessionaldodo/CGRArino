@@ -37,11 +37,10 @@
 
 	//CERTO
 	var tmp = Math.cos(this.initialHRot * degToRad)* Math.cos(this.initialVRot * degToRad);
-	this.z = z - 1*Math.cos(this.initialHRot * degToRad)* Math.sin(this.initialVRot * degToRad) - tmp;
+	this.z = z -1*Math.cos(this.initialHRot * degToRad)* Math.sin(this.initialVRot * degToRad) - 0.8*tmp;
 
-	console.log(this.x + " " + this.y + " " +this.z);
-	console.log(x + " " + y + " " + z);
-
+	console.log("Z Inicial" + this.z);
+	
 	//this.P2;
 	//this.P3;	
 	this.P4;
@@ -232,6 +231,8 @@
 		this.y + Math.sin(-this.initialVRot * degToRad),
  		this.z + Math.cos(this.initialHRot * degToRad)* Math.cos(this.initialVRot * degToRad),
  	]
+
+ 	console.log(this.P2[0] + " " + this.P2[1] + " " + this.P2[2]);
 
 	
 	/*this.P2 = [
